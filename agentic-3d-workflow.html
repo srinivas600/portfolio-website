@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>3D Agentic Workflow Multi-Agent System</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&amp;family=Rajdhani:wght@300;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#10B981",secondary: "#7B61FF",accent: "#FF2E63",success: "#00FF94",warning: "#FFD700","background-light": "#f0f4f8",
+                        "background-dark": "#050510",
+                        "surface-dark": "#0F1020",
+                        "glass": "rgba(255, 255, 255, 0.05)"
+                    },
+                    fontFamily: {
+                        display: ["Orbitron", "sans-serif"],
+                        body: ["Rajdhani", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'neon': '0 0 10px theme("colors.primary"), 0 0 20px theme("colors.primary")',
+                        'neon-secondary': '0 0 10px theme("colors.secondary"), 0 0 20px theme("colors.secondary")',
+                    }
+                },
+            },
+        };
+    </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+        body {
+            overflow: hidden;
+            margin: 0;
+        }
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .hud-overlay {
+            z-index: 10;
+            pointer-events: none;}
+        .interactive-element {
+            pointer-events: auto;
+        }
+        .glass-panel {
+            background: rgba(15, 16, 32, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }.scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #10B981, transparent);
+            opacity: 0.5;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 font-body transition-colors duration-300">
+<div id="canvas-container"></div>
+<div class="hud-overlay absolute inset-0 flex flex-col justify-between p-6 md:p-10">
+<div class="flex justify-between items-start w-full">
+<div class="interactive-element glass-panel p-4 rounded-xl border-l-4 border-primary shadow-lg animate-fade-in-down">
+<h1 class="font-display text-2xl md:text-4xl font-bold tracking-wider text-white mb-1">
+<span class="text-primary">AGENTIC</span> WORKFLOW
+                </h1>
+<div class="flex items-center space-x-2 text-xs md:text-sm text-gray-400">
+<span class="inline-block w-2 h-2 rounded-full bg-success animate-pulse"></span>
+<span>MULTI-AGENT SYSTEM</span>
+<span class="mx-2">|</span>
+<span>AGENTS: 6 ACTIVE</span>
+</div>
+</div>
+<div class="interactive-element flex space-x-3">
+<a href="index.html" class="glass-panel p-3 rounded-lg hover:bg-white/10 transition-all group" title="Back to Portfolio">
+<span class="material-icons-round text-white group-hover:scale-110 transition-transform">arrow_back</span>
+</a>
+<button class="glass-panel p-3 rounded-lg hover:bg-white/10 transition-all group" onclick="resetCamera()" title="Reset View">
+<span class="material-icons-round text-primary group-hover:scale-110 transition-transform">center_focus_strong</span>
+</button>
+<button class="glass-panel p-3 rounded-lg hover:bg-white/10 transition-all group" onclick="toggleFlow()" title="Toggle Agent Communication">
+<span class="material-icons-round text-secondary group-hover:scale-110 transition-transform">play_arrow</span>
+</button>
+<button class="glass-panel p-3 rounded-lg hover:bg-white/10 transition-all group" title="Settings">
+<span class="material-icons-round text-white group-hover:rotate-90 transition-transform">settings</span>
+</button>
+</div>
+</div>
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 transition-opacity duration-500" id="status-message">
+<div class="glass-panel px-8 py-4 rounded-full border border-primary/50 bg-black/80">
+<p class="font-display text-primary text-lg tracking-widest text-center">AGENTS COORDINATING...</p>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-end w-full gap-4">
+<div class="interactive-element glass-panel p-4 rounded-xl max-w-sm w-full">
+<h3 class="font-display text-sm text-gray-300 mb-3 border-b border-white/10 pb-2 uppercase tracking-wide">Agent Types</h3>
+<div class="grid grid-cols-2 gap-3 text-sm">
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-sm bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
+<span class="text-gray-300">Orchestrator</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-sm bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]"></span>
+<span class="text-gray-300">Planner</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-sm bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]"></span>
+<span class="text-gray-300">Executor</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-sm bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]"></span>
+<span class="text-gray-300">Researcher</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-sm bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.6)]"></span>
+<span class="text-gray-300">Validator</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-sm bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.6)]"></span>
+<span class="text-gray-300">Coordinator</span>
+</div>
+</div>
+</div>
+<div class="interactive-element glass-panel p-4 rounded-xl w-full md:w-96 font-mono text-xs overflow-hidden relative h-32 flex flex-col">
+<div class="scan-line"></div>
+<div class="flex justify-between items-center mb-2 text-primary border-b border-primary/20 pb-1">
+<span>&gt;_ AGENT_LOGS</span>
+<span class="animate-pulse">●</span>
+</div>
+<div class="overflow-y-auto space-y-1 text-gray-400 custom-scrollbar flex-1" id="terminal-content">
+<p class="text-green-400">[INFO] Orchestrator initialized</p>
+<p>[INFO] Planner agent ready</p>
+<p>[INFO] Executor agent ready</p>
+<p class="text-cyan-400">[TASK] Planning task decomposition...</p>
+<p class="opacity-50">Waiting for coordination signals...</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // --- 1. SETUP ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050510);
+        scene.fog = new THREE.FogExp2(0x050510, 0.015);
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(25, 20, 35);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.toneMapping = THREE.ReinhardToneMapping;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2 - 0.1;
+        // --- 2. LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(10, 20, 10);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
+        const spotLight = new THREE.SpotLight(0x10B981, 2);
+        spotLight.position.set(-10, 20, -5);
+        spotLight.angle = 0.5;
+        spotLight.penumbra = 0.5;
+        scene.add(spotLight);
+        const purpleLight = new THREE.PointLight(0x7B61FF, 1.5, 20);
+        purpleLight.position.set(5, 5, 5);
+        scene.add(purpleLight);
+        // --- 3. ENVIRONMENT ---
+        const gridHelper = new THREE.GridHelper(100, 100, 0x333333, 0x111111);
+        scene.add(gridHelper);
+        // Starfield
+        const starGeometry = new THREE.BufferGeometry();
+        const starMaterial = new THREE.PointsMaterial({color: 0xffffff, size: 0.05});
+        const starVertices = [];
+        for(let i=0; i<1000; i++) {
+            const x = (Math.random() - 0.5) * 100;
+            const y = (Math.random() - 0.5) * 50 + 25;
+            const z = (Math.random() - 0.5) * 100;
+            starVertices.push(x,y,z);
+        }
+        starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+        const stars = new THREE.Points(starGeometry, starMaterial);
+        scene.add(stars);
+        // --- 4. AGENT NODES ---
+        const nodes = [];
+        function createNode(x, y, z, color, label, icon) {
+            const group = new THREE.Group();
+            group.position.set(x, y, z);
+            // Glass Block
+            const geometry = new THREE.BoxGeometry(3, 2, 3);
+            const material = new THREE.MeshPhysicalMaterial({
+                color: color,
+                metalness: 0.1,
+                roughness: 0.1,
+                transmission: 0.6,
+                thickness: 1,
+                clearcoat: 1,
+                clearcoatRoughness: 0.1
+            });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.castShadow = true;
+            // Wireframe Edge
+            const edges = new THREE.EdgesGeometry(geometry);
+            const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0.5 }));
+            // Inner Core (Glowing)
+            const coreGeo = new THREE.BoxGeometry(1.5, 1, 1.5);
+            const coreMat = new THREE.MeshBasicMaterial({ color: color });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            // Label
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = 512;
+            canvas.height = 512;
+            context.fillStyle = 'rgba(5, 5, 16, 0.7)';
+            context.fillRect(0, 0, 512, 512);
+            context.strokeStyle = `rgba(${new THREE.Color(color).r * 255}, ${new THREE.Color(color).g * 255}, ${new THREE.Color(color).b * 255}, 0.8)`;
+            context.lineWidth = 15;
+            context.strokeRect(10, 10, 492, 492);
+            context.font = '200px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif'; 
+            context.fillStyle = 'white';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillText(icon, 256, 200);
+            context.font = 'bold 50px "Orbitron", sans-serif'; 
+            context.fillStyle = 'white';
+            context.textAlign = 'center';
+            context.shadowColor = "black";
+            context.shadowBlur = 10;
+            context.lineWidth = 4;
+            context.strokeText(label, 256, 380);
+            context.fillText(label, 256, 380);
+            const texture = new THREE.CanvasTexture(canvas);
+            const labelGeo = new THREE.PlaneGeometry(2.8, 2.8);
+            const labelMat = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide });
+            const labelMesh = new THREE.Mesh(labelGeo, labelMat);
+            labelMesh.rotation.x = -Math.PI / 2;
+            labelMesh.position.y = 1.01;
+            group.add(cube);
+            group.add(line);
+            group.add(core);
+            group.add(labelMesh);
+            scene.add(group);
+            nodes.push({ mesh: group, label: labelMesh, initialY: y });
+            return group;
+        }
+        // Create Agent Nodes in a network pattern
+        const orchestratorNode = createNode(0, 4, 0, 0x10B981, "Orchestrator", "🎯"); // Emerald - Center
+        const plannerNode = createNode(-8, 2, -5, 0x06B6D4, "Planner", "📋"); // Cyan
+        const executorNode = createNode(8, 2, -5, 0x3b82f6, "Executor", "⚡"); // Blue
+        const researcherNode = createNode(-8, 2, 5, 0xa855f7, "Researcher", "🔍"); // Purple
+        const validatorNode = createNode(8, 2, 5, 0xfacc15, "Validator", "✅"); // Yellow
+        const coordinatorNode = createNode(0, 0, -8, 0xf97316, "Coordinator", "🔗"); // Orange
+        
+        // --- 5. CREATE CONNECTIONS ---
+        function createConnection(startMesh, endMesh, color = 0x555555) {
+            const start = startMesh.position.clone();
+            const end = endMesh.position.clone();
+            const mid = start.clone().lerp(end, 0.5);
+            mid.y += 2;
+            const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
+            const points = curve.getPoints(20);
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ 
+                color: color, 
+                opacity: 0.4, 
+                transparent: true 
+            });
+            const line = new THREE.Line(geometry, material);
+            scene.add(line);
+            return curve;
+        }
+        
+        // Orchestrator connects to all agents
+        const path1 = createConnection(orchestratorNode, plannerNode, 0x06B6D4);
+        const path2 = createConnection(orchestratorNode, executorNode, 0x3b82f6);
+        const path3 = createConnection(orchestratorNode, researcherNode, 0xa855f7);
+        const path4 = createConnection(orchestratorNode, validatorNode, 0xfacc15);
+        const path5 = createConnection(orchestratorNode, coordinatorNode, 0xf97316);
+        
+        // Inter-agent communication
+        const path6 = createConnection(plannerNode, executorNode, 0x10B981);
+        const path7 = createConnection(executorNode, validatorNode, 0x10B981);
+        const path8 = createConnection(researcherNode, plannerNode, 0x10B981);
+        const path9 = createConnection(coordinatorNode, executorNode, 0x10B981);
+        
+        // Return paths (feedback)
+        const returnPath1 = createConnection(executorNode, orchestratorNode, 0x00FF94);
+        const returnPath2 = createConnection(validatorNode, orchestratorNode, 0x00FF94);
+        const returnPath3 = createConnection(plannerNode, orchestratorNode, 0x00FF94);
+        
+        // --- 6. ANIMATION & PARTICLES ---
+        const packets = [];
+        function spawnPacket(curve, color, isReturn = false) {
+            const geometry = new THREE.SphereGeometry(0.3, 8, 8);
+            const material = new THREE.MeshBasicMaterial({ color: color });
+            const sphere = new THREE.Mesh(geometry, material);
+            if (isReturn) {
+                const glowGeometry = new THREE.SphereGeometry(0.4, 8, 8);
+                const glowMaterial = new THREE.MeshBasicMaterial({ 
+                    color: color, 
+                    transparent: true, 
+                    opacity: 0.3 
+                });
+                const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+                sphere.add(glow);
+            }
+            scene.add(sphere);
+            packets.push({
+                mesh: sphere,
+                curve: curve,
+                progress: 0,
+                speed: 0.01 + Math.random() * 0.01,
+                isReturn: isReturn
+            });
+        }
+        
+        // Spawn initial packets from orchestrator
+        setInterval(() => {
+            const paths = [path1, path2, path3, path4, path5];
+            const colors = [0x06B6D4, 0x3b82f6, 0xa855f7, 0xfacc15, 0xf97316];
+            const randomIndex = Math.floor(Math.random() * paths.length);
+            spawnPacket(paths[randomIndex], colors[randomIndex], false);
+        }, 2000);
+        
+        // Spawn inter-agent communication
+        setInterval(() => {
+            const interPaths = [path6, path7, path8, path9];
+            spawnPacket(interPaths[Math.floor(Math.random() * interPaths.length)], 0x10B981, false);
+        }, 2500);
+        
+        // --- 7. LOGGING SYSTEM ---
+        const terminal = document.getElementById('terminal-content');
+        const logs = [
+            "Orchestrator: Task received, delegating to Planner",
+            "Planner: Decomposing task into subtasks",
+            "Executor: Executing subtask #1",
+            "Researcher: Gathering context for task",
+            "Validator: Validating execution results",
+            "Coordinator: Synchronizing agent states",
+            "Orchestrator: Task completed successfully",
+            "All agents: Status synchronized"
+        ];
+        function addLog() {
+            const log = logs[Math.floor(Math.random() * logs.length)];
+            const p = document.createElement('p');
+            p.className = "text-xs font-mono text-primary animate-pulse";
+            p.innerText = `> ${log}`;
+            terminal.appendChild(p);
+            terminal.scrollTop = terminal.scrollHeight;
+            if(terminal.children.length > 10) {
+                terminal.removeChild(terminal.children[0]);
+            }
+        }
+        setInterval(addLog, 2500);
+        
+        // --- 8. RENDER LOOP ---
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+            controls.update();
+            
+            // Animate Nodes (Float)
+            nodes.forEach((node, i) => {
+                node.mesh.position.y = node.initialY + Math.sin(time + i) * 0.2;
+            });
+            
+            // Animate Packets
+            for (let i = packets.length - 1; i >= 0; i--) {
+                const packet = packets[i];
+                packet.progress += packet.speed;
+                if (packet.progress >= 1) {
+                    scene.remove(packet.mesh);
+                    packets.splice(i, 1);
+                    
+                    // Trigger return packets when forward packets complete
+                    if (packet.curve === path2) {
+                        // Executor completes, send feedback
+                        setTimeout(() => spawnPacket(returnPath1, 0x00FF94, true), 500);
+                    }
+                    if (packet.curve === path4) {
+                        // Validator completes, send feedback
+                        setTimeout(() => spawnPacket(returnPath2, 0x00FF94, true), 500);
+                    }
+                    if (packet.curve === path1) {
+                        // Planner completes, send feedback
+                        setTimeout(() => spawnPacket(returnPath3, 0x00FF94, true), 500);
+                    }
+                } else {
+                    const point = packet.curve.getPoint(packet.progress);
+                    packet.mesh.position.copy(point);
+                    if (packet.isReturn && packet.mesh.children.length > 0) {
+                        packet.mesh.children[0].scale.setScalar(1 + Math.sin(time * 5) * 0.2);
+                    }
+                }
+            }
+            
+            // Rotate Stars slowly
+            stars.rotation.y = time * 0.05;
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        // --- 9. INTERACTION FUNCTIONS ---
+        window.resetCamera = () => {
+            gsap.to(camera.position, {
+                x: 25, y: 20, z: 35,
+                duration: 1.5,
+                ease: "power2.inOut"
+            });
+            gsap.to(controls.target, {
+                x: 0, y: 0, z: 0,
+                duration: 1.5,
+                ease: "power2.inOut"
+            });
+        };
+        window.toggleFlow = () => {
+            const status = document.getElementById('status-message');
+            status.style.opacity = '1';
+            // Burst of packets
+            for(let i=0; i<8; i++) {
+                setTimeout(() => {
+                    const paths = [path1, path2, path3, path4, path5, path6, path7, path8];
+                    const colors = [0x06B6D4, 0x3b82f6, 0xa855f7, 0xfacc15, 0xf97316, 0x10B981, 0x10B981, 0x10B981];
+                    spawnPacket(paths[i % paths.length], colors[i % colors.length], false);
+                }, i * 200);
+            }
+            setTimeout(() => {
+                status.style.opacity = '0';
+            }, 3000);
+        };
+        
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body></html>
+

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Medical ASI Dataset Workflow</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6",
+                        "accent": "#6366f1",
+                        "background-dark": "#020203",
+                        "surface": "#0a0a0c",
+                        "glass": "rgba(255, 255, 255, 0.03)",
+                        "glass-strong": "rgba(10, 10, 12, 0.7)",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "primary-dark": "#0d3ca0",
+                        "background-light": "#f6f6f8",
+                        "card-dark": "#161e2c",
+                        "border-dark": "#232f48",
+                    },
+                    fontFamily: {
+                        "serif": ["Playfair Display", "serif"],
+                        "sans": ["Space Grotesk", "sans-serif"],
+                        "display": ["Space Grotesk", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #101622; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #232f48; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #34425e; 
+        }
+        
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.75rem;
+            border: 2px solid #1152d4;
+            animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            z-index: -1;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.05);
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden antialiased">
+<!-- Main Container -->
+<div class="min-h-screen flex flex-col">
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="mt-4 rounded-full border border-white/5 bg-glass-strong backdrop-blur-md px-6 py-3 flex items-center justify-between shadow-2xl">
+<div class="flex items-center gap-3">
+<a href="index.html" class="flex items-center gap-3">
+<div class="flex items-center justify-center size-8 rounded-full bg-white/5 border border-white/10 text-white">
+<span class="font-serif font-bold italic text-sm">SN</span>
+</div>
+<span class="text-slate-200 text-sm font-serif italic tracking-wide">Srinivas N.</span>
+</a>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="about.html">About</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="experience.html">Experience</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="projects.html">Projects</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="contact.html">Contact</a>
+</nav>
+<a href="hire-me.html" class="group bg-white text-black hover:bg-slate-200 text-xs font-bold uppercase tracking-wider py-2 px-5 rounded-full transition-all flex items-center gap-2">
+<span>Hire me</span>
+<span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<div class="pt-24">
+<!-- Main Content -->
+<main class="flex-grow">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Hero Section -->
+<div class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-1 rounded bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider border border-primary/20">SFT Methodology</span>
+<span class="px-2 py-1 rounded bg-slate-800 text-slate-400 text-xs font-bold uppercase tracking-wider border border-slate-700">v2.4.0</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-2">ASI Dataset for Medical Reasoning</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg max-w-2xl">
+                                High-fidelity supervised fine-tuning dataset designed to align Large Language Models with expert clinical reasoning paths.
+                            </p>
+</div>
+<div class="flex gap-4">
+<a class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">code</span> Source
+                            </a>
+<a class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">description</span> Paper
+                            </a>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-white dark:bg-card-dark p-5 rounded-xl border border-gray-200 dark:border-border-dark shadow-sm">
+<div class="flex items-center gap-3 mb-1">
+<div class="p-2 rounded-lg bg-blue-500/10 text-blue-500">
+<span class="material-symbols-outlined">dataset</span>
+</div>
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Samples</span>
+</div>
+<div class="text-3xl font-bold">1.2M</div>
+</div>
+<div class="bg-white dark:bg-card-dark p-5 rounded-xl border border-gray-200 dark:border-border-dark shadow-sm">
+<div class="flex items-center gap-3 mb-1">
+<div class="p-2 rounded-lg bg-green-500/10 text-green-500">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Verification Accuracy</span>
+</div>
+<div class="text-3xl font-bold">98.5%</div>
+</div>
+<div class="bg-white dark:bg-card-dark p-5 rounded-xl border border-gray-200 dark:border-border-dark shadow-sm">
+<div class="flex items-center gap-3 mb-1">
+<div class="p-2 rounded-lg bg-purple-500/10 text-purple-500">
+<span class="material-symbols-outlined">local_hospital</span>
+</div>
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Specialties</span>
+</div>
+<div class="text-3xl font-bold">14</div>
+</div>
+<div class="bg-white dark:bg-card-dark p-5 rounded-xl border border-gray-200 dark:border-border-dark shadow-sm">
+<div class="flex items-center gap-3 mb-1">
+<div class="p-2 rounded-lg bg-orange-500/10 text-orange-500">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">SFT Epochs</span>
+</div>
+<div class="text-3xl font-bold">3.5</div>
+</div>
+</div>
+</div>
+<!-- Central Visualizer: Workflow Flowchart -->
+<div class="mb-12">
+<h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+                        Data Pipeline Visualization
+                    </h2>
+<div class="relative bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-border-dark p-8 md:p-12 overflow-hidden" data-alt="Abstract dark mode flowchart visualization with connecting nodes and lines on a grid background">
+<!-- Background Grid Pattern -->
+<div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- Flowchart Container -->
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">
+<!-- Node 1: Raw Input -->
+<div class="relative group flex flex-col items-center text-center w-48">
+<div class="w-16 h-16 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center mb-4 group-hover:border-primary group-hover:shadow-[0_0_20px_rgba(17,82,212,0.3)] transition-all duration-300">
+<span class="material-symbols-outlined text-3xl text-slate-400 group-hover:text-primary transition-colors">description</span>
+</div>
+<h3 class="font-bold text-lg mb-1">Raw Clinical Notes</h3>
+<p class="text-xs text-slate-400">Unstructured EMR data ingestion</p>
+</div>
+<!-- Connector Arrow -->
+<div class="hidden md:flex flex-1 h-[2px] bg-slate-700 relative items-center justify-center">
+<div class="absolute right-0 -top-[5px] w-0 h-0 border-t-[6px] border-t-transparent border-l-[8px] border-l-slate-700 border-b-[6px] border-b-transparent"></div>
+</div>
+<!-- Mobile Arrow (Down) -->
+<span class="md:hidden material-symbols-outlined text-slate-600">arrow_downward</span>
+<!-- Node 2: Processing -->
+<div class="relative group flex flex-col items-center text-center w-48">
+<div class="w-16 h-16 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center mb-4 group-hover:border-primary group-hover:shadow-[0_0_20px_rgba(17,82,212,0.3)] transition-all duration-300">
+<span class="material-symbols-outlined text-3xl text-slate-400 group-hover:text-primary transition-colors">security</span>
+</div>
+<h3 class="font-bold text-lg mb-1">PII Redaction</h3>
+<p class="text-xs text-slate-400">HIPAA compliant scrubbing</p>
+</div>
+<!-- Connector Arrow -->
+<div class="hidden md:flex flex-1 h-[2px] bg-slate-700 relative items-center justify-center">
+<div class="absolute right-0 -top-[5px] w-0 h-0 border-t-[6px] border-t-transparent border-l-[8px] border-l-slate-700 border-b-[6px] border-b-transparent"></div>
+</div>
+<span class="md:hidden material-symbols-outlined text-slate-600">arrow_downward</span>
+<!-- Node 3: Expert Loop (Highlighted) -->
+<div class="relative group flex flex-col items-center text-center w-48">
+<!-- Pulse Ring -->
+<div class="pulse-ring"></div>
+<div class="absolute -top-3 -right-3 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-[10px] font-bold text-black shadow-lg">
+                                    AI
+                                </div>
+<div class="w-16 h-16 rounded-xl bg-primary/20 border-2 border-primary flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(17,82,212,0.2)]">
+<span class="material-symbols-outlined text-3xl text-primary">psychology</span>
+</div>
+<h3 class="font-bold text-lg mb-1 text-primary">Expert Validation</h3>
+<p class="text-xs text-slate-400">MD/PhD HITL Loop</p>
+</div>
+<!-- Connector Arrow -->
+<div class="hidden md:flex flex-1 h-[2px] bg-primary relative items-center justify-center">
+<div class="absolute right-0 -top-[5px] w-0 h-0 border-t-[6px] border-t-transparent border-l-[8px] border-l-primary border-b-[6px] border-b-transparent"></div>
+</div>
+<span class="md:hidden material-symbols-outlined text-primary">arrow_downward</span>
+<!-- Node 4: SFT Loop -->
+<div class="relative group flex flex-col items-center text-center w-48">
+<div class="w-16 h-16 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center mb-4 group-hover:border-primary group-hover:shadow-[0_0_20px_rgba(17,82,212,0.3)] transition-all duration-300">
+<span class="material-symbols-outlined text-3xl text-slate-400 group-hover:text-primary transition-colors">model_training</span>
+</div>
+<h3 class="font-bold text-lg mb-1">SFT Loop</h3>
+<p class="text-xs text-slate-400">Llama-3 Fine-tuning</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Grid: 2 Columns -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left: Distribution (2 cols width) -->
+<div class="lg:col-span-2 space-y-8">
+<!-- Timeline Section -->
+<div class="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-border-dark p-6">
+<h3 class="text-lg font-bold mb-6">Processing Timeline</h3>
+<div class="relative pl-8 border-l border-slate-700 space-y-8">
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-card-dark"></div>
+<h4 class="text-base font-bold text-white mb-1">Dataset Cleaning &amp; Structuring</h4>
+<p class="text-sm text-slate-400 mb-2">Normalization of 150k clinical abbreviations and typo correction using medical dictionary regex mapping.</p>
+<div class="flex gap-2">
+<span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300">Python</span>
+<span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300">Pandas</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative">
+<div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-card-dark"></div>
+<h4 class="text-base font-bold text-white mb-1">Class Balancing</h4>
+<p class="text-sm text-slate-400 mb-2">Synthetic data generation (SMOTE-like approach for text) to upsample rare pathologies like rare autoimmune diseases.</p>
+</div>
+<!-- Step 3 -->
+<div class="relative">
+<div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-card-dark animate-pulse"></div>
+<h4 class="text-base font-bold text-white mb-1">Final Evaluation Phase</h4>
+<p class="text-sm text-slate-400">Current stage: Benchmarking against GPT-4 and Med-PaLM 2 on USMLE sample questions.</p>
+</div>
+</div>
+</div>
+<!-- Histograms -->
+<div class="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-border-dark p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-bold">Specialty Distribution</h3>
+<button class="text-xs text-primary font-medium hover:underline">View Full Report</button>
+</div>
+<div class="space-y-4">
+<!-- Bar 1 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-slate-300">Internal Medicine</span>
+<span class="text-slate-400">35%</span>
+</div>
+<div class="w-full bg-slate-800 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 35%"></div>
+</div>
+</div>
+<!-- Bar 2 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-slate-300">Radiology</span>
+<span class="text-slate-400">22%</span>
+</div>
+<div class="w-full bg-slate-800 rounded-full h-2">
+<div class="bg-primary/80 h-2 rounded-full" style="width: 22%"></div>
+</div>
+</div>
+<!-- Bar 3 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-slate-300">Oncology</span>
+<span class="text-slate-400">18%</span>
+</div>
+<div class="w-full bg-slate-800 rounded-full h-2">
+<div class="bg-primary/60 h-2 rounded-full" style="width: 18%"></div>
+</div>
+</div>
+<!-- Bar 4 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-slate-300">Pathology</span>
+<span class="text-slate-400">12%</span>
+</div>
+<div class="w-full bg-slate-800 rounded-full h-2">
+<div class="bg-primary/40 h-2 rounded-full" style="width: 12%"></div>
+</div>
+</div>
+<!-- Bar 5 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-slate-300">Pediatrics</span>
+<span class="text-slate-400">8%</span>
+</div>
+<div class="w-full bg-slate-800 rounded-full h-2">
+<div class="bg-primary/30 h-2 rounded-full" style="width: 8%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Metrics Grid (1 col width) -->
+<div class="lg:col-span-1 flex flex-col gap-6">
+<h3 class="text-lg font-bold px-1">Model Performance</h3>
+<!-- Metric Card 1 -->
+<div class="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-border-dark p-6 relative overflow-hidden group hover:border-primary transition-colors">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">target</span>
+</div>
+<p class="text-sm text-slate-400 mb-1">F1 Score (Macro)</p>
+<div class="flex items-end gap-3">
+<span class="text-4xl font-bold text-white">0.92</span>
+<span class="text-sm text-green-500 font-medium mb-1 flex items-center">
+<span class="material-symbols-outlined text-sm">trending_up</span> +12%
+                                </span>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-700 flex justify-between text-xs text-slate-500">
+<span>Baseline: 0.80</span>
+<span>Target: 0.95</span>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-border-dark p-6 relative overflow-hidden group hover:border-primary transition-colors">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">precision_manufacturing</span>
+</div>
+<p class="text-sm text-slate-400 mb-1">Hallucination Rate</p>
+<div class="flex items-end gap-3">
+<span class="text-4xl font-bold text-white">1.2%</span>
+<span class="text-sm text-green-500 font-medium mb-1 flex items-center">
+<span class="material-symbols-outlined text-sm">trending_down</span> -4.5%
+                                </span>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-700 flex justify-between text-xs text-slate-500">
+<span>Baseline: 5.7%</span>
+<span>Industry Avg: 3.0%</span>
+</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-border-dark p-6 relative overflow-hidden group hover:border-primary transition-colors">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">speed</span>
+</div>
+<p class="text-sm text-slate-400 mb-1">Inference Latency</p>
+<div class="flex items-end gap-3">
+<span class="text-4xl font-bold text-white">45ms</span>
+<span class="text-sm text-slate-400 font-medium mb-1 flex items-center">
+<span class="material-symbols-outlined text-sm">remove</span> 0%
+                                </span>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-700 flex justify-between text-xs text-slate-500">
+<span>Batch Size: 32</span>
+<span>A100 GPU</span>
+</div>
+</div>
+<!-- Download Mini CTA -->
+<div class="bg-primary/10 rounded-xl border border-primary/20 p-6 text-center mt-auto">
+<h4 class="font-bold text-primary mb-2">Ready to test?</h4>
+<p class="text-sm text-slate-400 mb-4">Download the validation set sample (10k rows) to verify schema.</p>
+<button class="w-full bg-white text-primary font-bold py-2 rounded shadow hover:bg-gray-100 transition-colors text-sm">Get Sample JSON</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Navigation -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center border-t border-white/10 pt-10 mt-4">
+<a class="group flex items-center gap-4 text-slate-400 hover:text-white transition-colors" href="project-6.html">
+<div class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs uppercase tracking-widest text-slate-600">Previous Project</span>
+<span class="font-bold">Cyber-Threat SFT Dataset</span>
+</div>
+</a>
+<a class="group flex items-center gap-4 text-slate-400 hover:text-white transition-colors text-right" href="project-8.html">
+<div class="flex flex-col">
+<span class="text-xs uppercase tracking-widest text-slate-600">Next Project</span>
+<span class="font-bold">Real-time Voice AI Pipeline</span>
+</div>
+<div class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</a>
+</div>
+</div>
+<footer class="w-full py-12 border-t border-white/5 bg-[#020203] relative z-10">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col gap-1">
+<span class="text-white font-serif text-lg">Srinivas Nallamati</span>
+<p class="text-slate-600 text-xs">© 2024. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://github.com/srinivas600" target="_blank">GitHub</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://linkedin.com/in/srinivas-nallamati" target="_blank">LinkedIn</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="contact.html">Contact</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

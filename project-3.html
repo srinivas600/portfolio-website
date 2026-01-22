@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RLHF Multi-Agent Framework - AI Portfolio</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#3b82f6",
+              "accent": "#6366f1",
+              "background-dark": "#020203",
+              "surface": "#0a0a0c",
+              "glass": "rgba(255, 255, 255, 0.03)",
+              "glass-strong": "rgba(10, 10, 12, 0.7)",
+              "glass-border": "rgba(255, 255, 255, 0.08)",
+              "primary-dark": "#0ea5b3",
+              "background-light": "#f6f8f8",
+              "surface-dark": "#162a2d",
+              "surface-darker": "#0b1617",
+            },
+            fontFamily: {
+              "serif": ["Playfair Display", "serif"],
+              "sans": ["Space Grotesk", "sans-serif"],
+              "display": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+            boxShadow: {
+                'glow': '0 0 20px rgba(19, 218, 236, 0.15)',
+                'glow-strong': '0 0 30px rgba(19, 218, 236, 0.3)',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #102022; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #234548; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #13daec; 
+        }
+        
+        /* Subtle grid background pattern */
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, #234548 1px, transparent 1px),
+                              linear-gradient(to bottom, #234548 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+        }
+        
+        .code-syntax-keyword { color: #f472b6; }
+        .code-syntax-function { color: #60a5fa; }
+        .code-syntax-string { color: #13daec; }
+        .code-syntax-comment { color: #64748b; font-style: italic; }
+    </style>
+</head>
+<body class="font-sans overflow-x-hidden selection:bg-primary selection:text-white" style="background-color: #020203; color: #ffffff;">
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="mt-4 rounded-full border border-white/5 bg-glass-strong backdrop-blur-md px-6 py-3 flex items-center justify-between shadow-2xl">
+<div class="flex items-center gap-3">
+<a href="index.html" class="flex items-center gap-3">
+<div class="flex items-center justify-center size-8 rounded-full bg-white/5 border border-white/10 text-white">
+<span class="font-serif font-bold italic text-sm">SN</span>
+</div>
+<span class="text-slate-200 text-sm font-serif italic tracking-wide">Srinivas N.</span>
+</a>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="about.html">About</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="experience.html">Experience</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="projects.html">Projects</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="contact.html">Contact</a>
+</nav>
+<a href="hire-me.html" class="group bg-white text-black hover:bg-slate-200 text-xs font-bold uppercase tracking-wider py-2 px-5 rounded-full transition-all flex items-center gap-2">
+<span>Hire me</span>
+<span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<div class="pt-24">
+<!-- Main Content Wrapper -->
+<div class="pt-24 pb-20 relative min-h-screen">
+<!-- Background Decor -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-20 bg-grid-pattern"></div>
+<div class="absolute top-20 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="layout-container flex flex-col items-center w-full relative z-10">
+<div class="max-w-[1080px] w-full px-6 flex flex-col gap-12">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-sm text-slate-400">
+<a class="hover:text-primary transition-colors" href="index.html">Portfolio</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="projects.html">Machine Learning</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary font-medium">Project 03: RLHF Framework</span>
+</nav>
+<!-- Page Heading -->
+<header class="flex flex-col gap-6 border-b border-[#234548] pb-10">
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+<div class="flex flex-col gap-4 max-w-2xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 w-fit">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-bold text-primary tracking-widest uppercase">Research Project 03</span>
+</div>
+<h1 class="text-4xl md:text-6xl font-black leading-tight tracking-tight text-white">
+                                RLHF Multi-Agent <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">Framework</span>
+</h1>
+<p class="text-slate-400 text-lg leading-relaxed max-w-xl">
+                                Orchestrating complex agent interactions with Proximal Policy Optimization (PPO) training cycles and strict safety alignment protocols defined by constitutional AI principles.
+                            </p>
+</div>
+<!-- Quick Stats / Meta -->
+<div class="flex flex-wrap gap-3 max-w-sm lg:justify-end">
+<div class="px-4 py-2 bg-surface-dark border border-[#234548] rounded-lg">
+<span class="block text-xs text-slate-500 uppercase tracking-wider mb-1">Role</span>
+<span class="text-sm font-bold text-white">AI Engineer (Lead)</span>
+</div>
+<div class="px-4 py-2 bg-surface-dark border border-[#234548] rounded-lg">
+<span class="block text-xs text-slate-500 uppercase tracking-wider mb-1">Timeline</span>
+<span class="text-sm font-bold text-white">8 Weeks</span>
+</div>
+<div class="px-4 py-2 bg-surface-dark border border-[#234548] rounded-lg">
+<span class="block text-xs text-slate-500 uppercase tracking-wider mb-1">Status</span>
+<span class="text-sm font-bold text-primary">Production Ready</span>
+</div>
+</div>
+</div>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded bg-[#234548]/30 border border-[#234548] text-primary text-xs font-medium">Reinforcement Learning</span>
+<span class="px-3 py-1 rounded bg-[#234548]/30 border border-[#234548] text-primary text-xs font-medium">Multi-Agent Systems</span>
+<span class="px-3 py-1 rounded bg-[#234548]/30 border border-[#234548] text-primary text-xs font-medium">PPO / DPO</span>
+<span class="px-3 py-1 rounded bg-[#234548]/30 border border-[#234548] text-primary text-xs font-medium">Python</span>
+<span class="px-3 py-1 rounded bg-[#234548]/30 border border-[#234548] text-primary text-xs font-medium">PyTorch</span>
+</div>
+</header>
+<!-- Architecture Visual (Flowchart) -->
+<section class="flex flex-col gap-8">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-bold text-white flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+                            System Architecture
+                        </h3>
+<span class="text-xs text-slate-500 uppercase tracking-widest border border-slate-700 px-2 py-1 rounded">Interactive View</span>
+</div>
+<!-- Diagram Container -->
+<div class="relative w-full bg-surface-darker border border-[#234548] rounded-2xl p-8 lg:p-12 overflow-hidden group">
+<!-- Simulated Grid Lines in background -->
+<div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
+<!-- Flow Layout -->
+<div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 items-center justify-items-center">
+<!-- Left: Environment -->
+<div class="flex flex-col items-center gap-4 relative">
+<div class="w-48 h-32 bg-surface-dark border-2 border-[#234548] rounded-xl flex flex-col items-center justify-center p-4 relative shadow-lg hover:border-primary/50 transition-all duration-300">
+<span class="material-symbols-outlined text-4xl text-slate-500 mb-2">view_in_ar</span>
+<span class="text-white font-bold">Environment</span>
+<span class="text-xs text-slate-500 text-center mt-1">Simulated State</span>
+<!-- Connection Line Right -->
+<div class="hidden md:block absolute -right-6 top-1/2 w-8 h-[2px] bg-[#234548]"></div>
+<div class="hidden md:block absolute -right-6 top-1/2 -translate-y-1/2 translate-x-full">
+<span class="material-symbols-outlined text-[#234548] -ml-2 text-sm">arrow_forward_ios</span>
+</div>
+</div>
+<div class="text-xs text-slate-500 font-mono mt-2 bg-black/20 px-2 py-1 rounded">State (s<sub>t</sub>)</div>
+</div>
+<!-- Center: Agent Loop -->
+<div class="flex flex-col gap-12 relative w-full items-center">
+<!-- Agent -->
+<div class="w-56 h-40 bg-background-dark border-2 border-primary shadow-glow rounded-xl flex flex-col items-center justify-center p-4 relative z-20">
+<div class="absolute -top-3 px-3 py-1 bg-primary text-background-dark text-xs font-bold rounded-full uppercase tracking-wider shadow-glow">Active Policy</div>
+<span class="material-symbols-outlined text-5xl text-primary mb-2 animate-pulse">smart_toy</span>
+<span class="text-white font-bold text-lg">PPO Agent</span>
+<span class="text-xs text-primary/80 text-center mt-1 font-mono">π<sub>θ</sub>(a<sub>t</sub>|s<sub>t</sub>)</span>
+</div>
+<!-- Feedback Loop Visualization -->
+<div class="absolute inset-0 border-2 border-dashed border-[#234548] rounded-[3rem] -z-10 scale-125 md:scale-110 pointer-events-none"></div>
+<!-- Reward Model -->
+<div class="w-56 h-32 bg-surface-dark border-2 border-indigo-500/50 rounded-xl flex flex-col items-center justify-center p-4 relative z-20 shadow-lg mt-4">
+<span class="material-symbols-outlined text-3xl text-indigo-400 mb-2">model_training</span>
+<span class="text-white font-bold">Reward Model</span>
+<span class="text-xs text-indigo-300/60 text-center mt-1">Preference Ranking</span>
+</div>
+</div>
+<!-- Right: Optimization -->
+<div class="flex flex-col items-center gap-4 relative">
+<div class="w-48 h-auto bg-surface-dark border-2 border-[#234548] rounded-xl flex flex-col p-4 relative shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="flex items-center gap-2 mb-3 border-b border-white/5 pb-2">
+<span class="material-symbols-outlined text-emerald-400 text-sm">update</span>
+<span class="text-white font-bold text-sm">Optimization</span>
+</div>
+<ul class="space-y-2">
+<li class="flex items-center justify-between text-xs text-slate-400">
+<span>KL Div</span>
+<span class="text-emerald-400 font-mono">0.02</span>
+</li>
+<li class="flex items-center justify-between text-xs text-slate-400">
+<span>Entropy</span>
+<span class="text-emerald-400 font-mono">High</span>
+</li>
+<li class="flex items-center justify-between text-xs text-slate-400">
+<span>Loss</span>
+<span class="text-emerald-400 font-mono">↓ 1.4e-3</span>
+</li>
+</ul>
+<!-- Connection Line Left -->
+<div class="hidden md:block absolute -left-6 top-1/2 w-8 h-[2px] bg-[#234548]"></div>
+<div class="hidden md:block absolute -left-6 top-1/2 -translate-y-1/2">
+<span class="material-symbols-outlined text-[#234548] -ml-2 text-sm rotate-180">arrow_forward_ios</span>
+</div>
+</div>
+<div class="text-xs text-slate-500 font-mono mt-2 bg-black/20 px-2 py-1 rounded">Update Step</div>
+</div>
+</div>
+<div class="absolute bottom-4 right-6 text-xs text-slate-600 font-mono flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span> Live Training Cycle Visualization
+                        </div>
+</div>
+</section>
+<!-- Detailed Workflow Section (HUD Style) -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Card 1: Reward Function -->
+<div class="group relative bg-surface-dark/40 backdrop-blur-md border border-[#234548] rounded-xl p-8 hover:bg-surface-dark/60 transition-all duration-300 overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">functions</span>
+</div>
+<h4 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+<span class="text-primary text-sm font-mono">[01]</span> Reward Design
+                        </h4>
+<p class="text-slate-400 mb-6 leading-relaxed">
+                            The reward function aggregates multiple signals to guide agent behavior. We utilize a hybrid approach combining sparse goal-completion rewards with dense shaping rewards.
+                        </p>
+<div class="space-y-3">
+<div class="flex items-center gap-3 p-3 rounded bg-black/20 border-l-2 border-primary">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<div class="flex flex-col">
+<span class="text-sm text-white font-medium">Sparsity Penalty</span>
+<span class="text-xs text-slate-500">Discourage unnecessary actions</span>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded bg-black/20 border-l-2 border-primary">
+<span class="material-symbols-outlined text-primary text-sm">flag</span>
+<div class="flex flex-col">
+<span class="text-sm text-white font-medium">Goal Completion</span>
+<span class="text-xs text-slate-500">+100 for successful task execution</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Safety Alignment -->
+<div class="group relative bg-surface-dark/40 backdrop-blur-md border border-[#234548] rounded-xl p-8 hover:bg-surface-dark/60 transition-all duration-300 overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">security</span>
+</div>
+<h4 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+<span class="text-primary text-sm font-mono">[02]</span> Safety Alignment
+                        </h4>
+<p class="text-slate-400 mb-6 leading-relaxed">
+                            Implementing Constitutional AI principles to ensure agents remain harmless and helpful. This involves a secondary "Critic" model that filters proposed actions.
+                        </p>
+<div class="grid grid-cols-2 gap-3">
+<div class="p-3 bg-red-500/10 border border-red-500/20 rounded flex flex-col gap-2">
+<span class="text-red-400 text-xs font-bold uppercase">Constraint 1</span>
+<span class="text-white text-sm">No Toxicity</span>
+</div>
+<div class="p-3 bg-red-500/10 border border-red-500/20 rounded flex flex-col gap-2">
+<span class="text-red-400 text-xs font-bold uppercase">Constraint 2</span>
+<span class="text-white text-sm">Data Privacy</span>
+</div>
+<div class="col-span-2 p-3 bg-primary/5 border border-primary/20 rounded flex items-center justify-between">
+<span class="text-primary text-xs font-bold uppercase">Pass Rate</span>
+<span class="text-white font-mono text-sm">99.8%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Code Terminal & Tech Stack -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Tech Stack Sidebar -->
+<div class="lg:col-span-1 flex flex-col gap-6">
+<h3 class="text-xl font-bold text-white">Tech Stack</h3>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-dark border border-[#234548] hover:border-primary/50 transition-colors group cursor-default">
+<img alt="Python Logo" class="w-8 h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWPVjdIb3VGaIDU3ZL6TrOTfud6ZZTE-rddqv86f5OhCxyGvWFcWzUjOAD-U7nh_ckhPLKWuXc45BWCRua4b0Ly_rXrltrRQ_O324AlIV7USM0bN6NraUSRFKT61Ac_Mg8F1-FZgG6drQuty0hySTEo-ja9bVualTxpi6vByLBb78iY7tRd_7IVVwfgpd4hnTCxlvxorvGJuYkMZ38SruOCRmn1o5a6Dyk_-J63pgn9v5Ame77xYU0UBDBoXmURMHXMN8N6knIXQYn"/>
+<div>
+<h5 class="text-white font-medium group-hover:text-primary transition-colors">Python</h5>
+<p class="text-xs text-slate-500">Core Logic</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-dark border border-[#234548] hover:border-primary/50 transition-colors group cursor-default">
+<img alt="PyTorch Logo" class="w-8 h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6xPmOZhsmxUlhOyiyG-Ci7zAvoaLW1G7JGb8U6bQTXuzzbMKxSNOckCTsWqSSaqOXOLp8FiQ-fXT7d_49oOotNLoXzoBfz3yBgEhPZdALURsHNoIz5oOJnKw0DqvqIMHNCNAe1eDXgYTBT6zQV6B7kOxIgTuwYJJkraALGgm7qgUTlsfxFDlwrK5bmTEh81lFtXDSvl1_UAUXQP5X9t9dVKPjvhV29eRDhFuTNc5QSH4Yur1DHm3EiX7U7NYnDa_L8Kvc1lalmmm0"/>
+<div>
+<h5 class="text-white font-medium group-hover:text-primary transition-colors">PyTorch</h5>
+<p class="text-xs text-slate-500">Neural Networks</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-dark border border-[#234548] hover:border-primary/50 transition-colors group cursor-default">
+<div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+<span class="text-black font-black text-xs">HF</span>
+</div>
+<div>
+<h5 class="text-white font-medium group-hover:text-primary transition-colors">Hugging Face</h5>
+<p class="text-xs text-slate-500">Transformers Library</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-dark border border-[#234548] hover:border-primary/50 transition-colors group cursor-default">
+<div class="w-8 h-8 bg-[#000000] rounded flex items-center justify-center border border-white/20">
+<span class="text-white font-bold text-[10px]">Ray</span>
+</div>
+<div>
+<h5 class="text-white font-medium group-hover:text-primary transition-colors">Ray RLlib</h5>
+<p class="text-xs text-slate-500">Distributed Training</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Code Terminal -->
+<div class="lg:col-span-2">
+<div class="rounded-xl overflow-hidden bg-[#0d1516] border border-[#234548] shadow-2xl">
+<!-- Terminal Header -->
+<div class="flex items-center justify-between px-4 py-2 bg-[#162a2d] border-b border-[#234548]">
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+<div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+</div>
+<div class="text-xs text-slate-400 font-mono">ppo_trainer.py</div>
+<div class="w-10"></div> <!-- Spacer -->
+</div>
+<!-- Code Content -->
+<div class="p-6 overflow-x-auto custom-scrollbar">
+<pre class="font-mono text-sm leading-relaxed text-slate-300"><span class="code-syntax-keyword">class</span> <span class="code-syntax-function">PPOTrainer</span>(BaseTrainer):
+    <span class="code-syntax-keyword">def</span> <span class="code-syntax-function">compute_loss</span>(self, model, inputs, return_outputs=False):
+        <span class="code-syntax-comment"># Calculate policy loss with clipping</span>
+        logprobs, values, dist_entropy = model(**inputs)
+        
+        ratio = torch.exp(logprobs - old_logprobs)
+        surr1 = ratio * advantages
+        surr2 = torch.clamp(ratio, <span class="code-syntax-string">1.0</span> - clip_param, <span class="code-syntax-string">1.0</span> + clip_param) * advantages
+        
+        policy_loss = -torch.min(surr1, surr2).mean()
+        
+        <span class="code-syntax-comment"># Add entropy bonus for exploration</span>
+        loss = policy_loss - ent_coef * dist_entropy + val_coef * value_loss
+        
+        <span class="code-syntax-keyword">return</span> (loss, outputs) <span class="code-syntax-keyword">if</span> return_outputs <span class="code-syntax-keyword">else</span> loss
+</pre>
+</div>
+</div>
+</div>
+</section>
+<!-- Results Dashboard -->
+<section class="w-full">
+<h3 class="text-xl font-bold text-white mb-6">Performance Metrics</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-surface-dark border border-[#234548] p-6 rounded-xl flex flex-col justify-between h-32">
+<span class="text-slate-400 text-sm font-medium">Training Steps</span>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-bold text-white">2.5M</span>
+<span class="text-xs text-emerald-400 mb-1">Complete</span>
+</div>
+<div class="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+<div class="h-full w-full bg-primary"></div>
+</div>
+</div>
+<div class="bg-surface-dark border border-[#234548] p-6 rounded-xl flex flex-col justify-between h-32">
+<span class="text-slate-400 text-sm font-medium">Mean Reward</span>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-bold text-white">84.2</span>
+<span class="text-xs text-emerald-400 mb-1">▲ 12%</span>
+</div>
+<!-- Mini Graph Placeholder -->
+<div class="flex gap-1 items-end h-6 mt-2 opacity-50">
+<div class="w-1/6 bg-primary h-[20%] rounded-t-sm"></div>
+<div class="w-1/6 bg-primary h-[40%] rounded-t-sm"></div>
+<div class="w-1/6 bg-primary h-[35%] rounded-t-sm"></div>
+<div class="w-1/6 bg-primary h-[60%] rounded-t-sm"></div>
+<div class="w-1/6 bg-primary h-[80%] rounded-t-sm"></div>
+<div class="w-1/6 bg-primary h-[100%] rounded-t-sm"></div>
+</div>
+</div>
+<div class="bg-surface-dark border border-[#234548] p-6 rounded-xl flex flex-col justify-between h-32">
+<span class="text-slate-400 text-sm font-medium">KL Divergence</span>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-bold text-white">0.02</span>
+<span class="text-xs text-blue-400 mb-1">Stable</span>
+</div>
+<!-- Mini Graph Placeholder -->
+<div class="flex gap-1 items-end h-6 mt-2 opacity-50">
+<div class="w-1/6 bg-blue-400 h-[60%] rounded-t-sm"></div>
+<div class="w-1/6 bg-blue-400 h-[55%] rounded-t-sm"></div>
+<div class="w-1/6 bg-blue-400 h-[65%] rounded-t-sm"></div>
+<div class="w-1/6 bg-blue-400 h-[60%] rounded-t-sm"></div>
+<div class="w-1/6 bg-blue-400 h-[58%] rounded-t-sm"></div>
+<div class="w-1/6 bg-blue-400 h-[60%] rounded-t-sm"></div>
+</div>
+</div>
+<div class="bg-surface-dark border border-[#234548] p-6 rounded-xl flex flex-col justify-between h-32">
+<span class="text-slate-400 text-sm font-medium">Eval Win Rate</span>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-bold text-white">92%</span>
+<span class="text-xs text-emerald-400 mb-1">vs Baseline</span>
+</div>
+<div class="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+<div class="h-full w-[92%] bg-emerald-400"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer Navigation -->
+<div class="flex justify-between items-center border-t border-[#234548] pt-10 mt-4">
+<a class="group flex items-center gap-4 text-slate-400 hover:text-white transition-colors" href="project-2.html">
+<div class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs uppercase tracking-widest text-slate-600">Previous Project</span>
+<span class="font-bold">Legal RAG Pipeline</span>
+</div>
+</a>
+<a class="group flex items-center gap-4 text-slate-400 hover:text-white transition-colors text-right" href="project-4.html">
+<div class="flex flex-col">
+<span class="text-xs uppercase tracking-widest text-slate-600">Next Project</span>
+<span class="font-bold">Multimodal RLMF Workflow</span>
+</div>
+<div class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</a>
+</div>
+</div>
+</div>
+<!-- Bottom Fade -->
+<div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background-dark to-transparent pointer-events-none"></div>
+</div>
+<footer class="w-full py-12 border-t border-white/5 bg-[#020203] relative z-10">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col gap-1">
+<span class="text-white font-serif text-lg">Srinivas Nallamati</span>
+<p class="text-slate-600 text-xs">© 2024. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://github.com/srinivas600" target="_blank">GitHub</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://linkedin.com/in/srinivas-nallamati" target="_blank">LinkedIn</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="contact.html">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>

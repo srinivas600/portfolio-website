@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Experience &amp; Technical Stack - Srinivas Nallamati</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6",
+                        "accent": "#6366f1",
+                        "background-dark": "#020203",
+                        "surface": "#0a0a0c",
+                        "glass": "rgba(255, 255, 255, 0.03)",
+                        "glass-strong": "rgba(10, 10, 12, 0.7)",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "accent-cyan": "#00f0ff",
+                        "background-light": "#f6f6f8",
+                        "surface-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "serif": ["Playfair Display", "serif"],
+                        "sans": ["Space Grotesk", "sans-serif"],
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    boxShadow: {
+                        'neon': '0 0 10px rgba(17, 82, 212, 0.5), 0 0 20px rgba(0, 240, 255, 0.3)',
+                        'neon-strong': '0 0 15px rgba(17, 82, 212, 0.7), 0 0 30px rgba(0, 240, 255, 0.5)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'flow-down': 'flowDown 20s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        flowDown: {
+                            '0%': { transform: 'translateY(-10%)' },
+                            '100%': { transform: 'translateY(10%)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style>.hexagon {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }.bg-grid-pattern {
+            background-image: linear-gradient(to right, #1f2937 1px, transparent 1px),
+            linear-gradient(to bottom, #1f2937 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }.glass-panel {
+            background: rgba(16, 22, 34, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }.scroll-active-node {
+            border-color: #00f0ff !important;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.6) !important;
+            transform: scale(1.1);
+        }
+        .scroll-active-node .material-symbols-outlined {
+            color: #00f0ff !important;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+        }
+        .scroll-line-fill {
+            height: 0%;
+            transition: height 0.5s ease-out;
+        }.perspective-container {
+            perspective: 1000px;
+        }
+        .bg-mesh-grid {
+            transform-style: preserve-3d;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+            background-size: 100px 100px;
+            width: 200%;
+            height: 200%;
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            transform: rotateX(60deg) translateY(0);
+            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+        }
+    </style>
+</head>
+<body class="font-sans overflow-x-hidden selection:bg-primary selection:text-white" style="background-color: #020203; color: #ffffff;">
+<div class="fixed inset-0 pointer-events-none z-0 bg-[#050A15]">
+<div class="absolute inset-0 bg-gradient-to-b from-[#02040a] via-[#050A15] to-[#0a1120]"></div>
+<div class="absolute inset-0 perspective-container overflow-hidden opacity-30">
+<div class="bg-mesh-grid" id="grid-plane"></div>
+</div>
+<div class="absolute inset-0 overflow-hidden" id="floating-shapes">
+<div class="absolute top-1/4 left-1/4 w-64 h-64 border border-primary/20 rounded-full blur-[80px] animate-pulse-slow"></div>
+<div class="absolute bottom-1/3 right-1/4 w-96 h-96 border border-accent-cyan/10 rounded-full blur-[100px] animate-pulse"></div>
+<div class="scroll-shape absolute top-[-10%] right-[10%] w-32 h-32 border border-white/5 opacity-20 rotate-45" data-speed="0.2"></div>
+<div class="scroll-shape absolute top-[40%] left-[-5%] w-48 h-48 border border-primary/10 opacity-10 rotate-12 rounded-lg" data-speed="0.1"></div>
+<div class="scroll-shape absolute bottom-[-20%] left-[20%] w-64 h-64 border border-accent-cyan/5 opacity-10 rotate-[-15deg] rounded-full" data-speed="0.3"></div>
+</div>
+<div class="absolute inset-0 opacity-[0.03] mix-blend-overlay" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC42cLjRW2g1SbQzMdzc7CU9r5RCjj6WH7OvShaZRXgAVJVZRPkARfJULdGKehecbOOT--M1DGxwAXWgIZHhIjTGhhwkAz_iR9pqd7VBFjb_zatSRCNT5RFmMVkhS-qs8Fk7CZ5Q4-1owsAgCAIPp9vx1754WkK2lDYmEneIqq32A5WtD0UISqw41zfaf97Yx2sSTWJe-eQywHjU1ART0GK1FZuBrabYlvTWkO6iaR8RAmrLGiLL8HwJBsiVbsicLIXbeiLZJ3zWJE7');"></div>
+</div>
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="mt-4 rounded-full border border-white/5 bg-glass-strong backdrop-blur-md px-6 py-3 flex items-center justify-between shadow-2xl">
+<div class="flex items-center gap-3">
+<a href="index.html" class="flex items-center gap-3">
+<div class="flex items-center justify-center size-8 rounded-full bg-white/5 border border-white/10 text-white">
+<span class="font-serif font-bold italic text-sm">SN</span>
+</div>
+<span class="text-slate-200 text-sm font-serif italic tracking-wide">Srinivas N.</span>
+</a>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="about.html">About</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="experience.html">Experience</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="projects.html">Projects</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="contact.html">Contact</a>
+</nav>
+<a href="hire-me.html" class="group bg-white text-black hover:bg-slate-200 text-xs font-bold uppercase tracking-wider py-2 px-5 rounded-full transition-all flex items-center gap-2">
+<span>Hire me</span>
+<span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<div class="pt-24">
+<main class="relative z-10 flex-grow flex flex-col justify-center py-12 lg:py-20">
+<div class="max-w-7xl mx-auto w-full px-6 grid lg:grid-cols-2 gap-16 lg:gap-24">
+<div class="flex flex-col gap-10">
+<div class="space-y-4">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-accent-cyan text-xs font-bold tracking-widest uppercase">
+<span class="w-2 h-2 rounded-full bg-accent-cyan shadow-neon animate-pulse"></span>
+                        Career Path
+                    </div>
+<h1 class="text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+                        Building the <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-accent-cyan to-primary animate-gradient-x">Future of AI</span>
+</h1>
+                    <p class="text-gray-400 text-lg max-w-md font-body font-light">
+                        Specialized in RAG, Agentic AI, LLM development, and AI dataset creation. Expert in SFT, RLHF, and RLMF for building production-ready AI systems.
+                    </p>
+</div>
+<div class="relative pl-4 mt-8 timeline-container">
+<div class="absolute left-[19px] top-2 bottom-0 w-[2px] bg-white/10"></div>
+<div class="absolute left-[19px] top-2 w-[2px] bg-gradient-to-b from-accent-cyan via-primary to-transparent scroll-line-fill shadow-[0_0_10px_rgba(0,240,255,0.5)]" id="timeline-fill"></div>
+<div class="flex flex-col gap-24 pb-20">
+<div class="relative flex gap-6 group timeline-item" data-index="0">
+<div class="relative z-10 mt-1.5 flex-shrink-0">
+<div class="timeline-node w-10 h-10 rounded-full bg-[#050A15] border-2 border-white/20 flex items-center justify-center transition-all duration-500">
+<span class="material-symbols-outlined text-gray-500 text-xl transition-colors duration-500">smart_toy</span>
+</div>
+</div>
+<div class="flex-1 glass-panel p-6 rounded-xl hover:bg-surface-dark/80 transition-all hover:border-accent-cyan/30 duration-300 group-hover:translate-x-2 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-20 h-20 bg-accent-cyan/5 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
+<div class="flex justify-between items-start mb-2 flex-wrap gap-2 relative z-10">
+<div>
+<h3 class="text-xl font-bold text-white">AI Engineer</h3>
+<p class="text-primary font-medium">Turing</p>
+<p class="text-gray-500 text-xs mt-0.5">Palo Alto, California</p>
+</div>
+<span class="text-xs font-mono py-1 px-2 rounded bg-white/5 text-gray-300 border border-white/10">Dec 2025 - Present</span>
+</div>
+<ul class="text-gray-400 text-sm mb-4 font-body leading-relaxed relative z-10 space-y-2 list-disc list-inside">
+<li>Built and validated RLMF (Reinforcement Learning from Model Feedback) datasets, leveraging model-generated critiques, self-reflection signals, and reward modeling to scale alignment with minimal human intervention.</li>
+<li>Implemented dataset quality checks, bias analysis, and distribution balancing to improve training stability, generalization, and robustness of large-scale ASI-oriented models.</li>
+<li>Developed Supervised Fine-Tuning (SFT) datasets with high-quality prompt-response pairs, ensuring consistency, safety alignment, and task diversity across reasoning, coding, and instruction-following domains.</li>
+<li>Designed and curated reinforcement learning (RL) environment datasets, including state-action trajectories, reward signals, and edge-case scenarios to support policy learning and evaluation.</li>
+</ul>
+<div class="flex flex-wrap gap-2 relative z-10">
+<span class="text-[10px] uppercase tracking-wider font-semibold text-accent-cyan bg-accent-cyan/10 px-2 py-1 rounded border border-accent-cyan/20">RLMF</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-accent-cyan bg-accent-cyan/10 px-2 py-1 rounded border border-accent-cyan/20">SFT</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-accent-cyan bg-accent-cyan/10 px-2 py-1 rounded border border-accent-cyan/20">PyTorch</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-accent-cyan bg-accent-cyan/10 px-2 py-1 rounded border border-accent-cyan/20">ASI</span>
+</div>
+</div>
+</div>
+<div class="relative flex gap-6 group timeline-item" data-index="1">
+<div class="relative z-10 mt-1.5 flex-shrink-0">
+<div class="timeline-node w-10 h-10 rounded-full bg-[#050A15] border-2 border-white/20 flex items-center justify-center transition-all duration-500">
+<span class="material-symbols-outlined text-gray-500 text-xl transition-colors duration-500">dns</span>
+</div>
+</div>
+<div class="flex-1 glass-panel p-6 rounded-xl hover:bg-surface-dark/80 transition-all hover:border-primary/50 duration-300 group-hover:translate-x-2 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
+<div class="flex justify-between items-start mb-2 flex-wrap gap-2 relative z-10">
+<div>
+<h3 class="text-xl font-bold text-white">Systems Engineer (AI/ML Specialization)</h3>
+<p class="text-primary font-medium">Infosys</p>
+<p class="text-gray-500 text-xs mt-0.5">Hyderabad, Telangana</p>
+</div>
+<span class="text-xs font-mono py-1 px-2 rounded bg-white/5 text-gray-300 border border-white/10">Jan 2023 - Dec 2025</span>
+</div>
+<ul class="text-gray-400 text-sm mb-4 font-body leading-relaxed relative z-10 space-y-2 list-disc list-inside">
+<li>Designed and deployed generative AI solutions using RAG architecture (LangChain, LangGraph) to enhance domain-specific QA accuracy by 40% compared to baseline LLM responses.</li>
+<li>Developed and optimized document schemas and indexing strategies, reducing retrieval latency by 50% in high-volume AI inference systems.</li>
+<li>Implemented multi-agent workflows leveraging LangChain Agents and MCP (Model Context Protocol) to enable dynamic tool use and adaptive reasoning in production systems.</li>
+<li>Optimized vector search performance by 50% through hybrid retrieval (dense + keyword) and quantization techniques (GGUF/FP16).</li>
+<li>Implemented real-time monitoring for generative AI systems using Prometheus/Grafana, reducing latency spikes by 35%.</li>
+</ul>
+<div class="flex flex-wrap gap-2 relative z-10">
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">RAG</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">LangChain</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">AWS</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">Prometheus</span>
+</div>
+</div>
+</div>
+<div class="relative flex gap-6 group timeline-item" data-index="2">
+<div class="relative z-10 mt-1.5 flex-shrink-0">
+<div class="timeline-node w-10 h-10 rounded-full bg-[#050A15] border-2 border-white/20 flex items-center justify-center transition-all duration-500">
+<span class="material-symbols-outlined text-gray-500 text-xl transition-colors duration-500">code</span>
+</div>
+</div>
+<div class="flex-1 glass-panel p-6 rounded-xl hover:bg-surface-dark/80 transition-all hover:border-primary/50 duration-300 group-hover:translate-x-2 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
+<div class="flex justify-between items-start mb-2 flex-wrap gap-2 relative z-10">
+<div>
+<h3 class="text-xl font-bold text-white">Systems Associate (AI/ML)</h3>
+<p class="text-primary font-medium">Infosys</p>
+<p class="text-gray-500 text-xs mt-0.5">Hyderabad, Telangana</p>
+</div>
+<span class="text-xs font-mono py-1 px-2 rounded bg-white/5 text-gray-300 border border-white/10">Sep 2021 - Jan 2023</span>
+</div>
+<ul class="text-gray-400 text-sm mb-4 font-body leading-relaxed relative z-10 space-y-2 list-disc list-inside">
+<li>Developed Python-based ETL pipelines for preprocessing large-scale text datasets (10M+ records) used to train custom transformer models (BERT, GPT-2).</li>
+<li>Automated model retraining workflows using GitHub Actions and AWS Lambda, reducing manual intervention by 60%.</li>
+<li>Collaborated with NLP teams to evaluate LLM performance using metrics like BLEU, ROUGE, and BERTScore, ensuring model reliability.</li>
+<li>Researched and prototyped synthetic data generation techniques (GANs, LLM-augmentation) to address data scarcity in client projects.</li>
+</ul>
+<div class="flex flex-wrap gap-2 relative z-10">
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">Python</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">BERT</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">AWS Lambda</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">GitHub Actions</span>
+</div>
+</div>
+</div>
+<div class="relative flex gap-6 group timeline-item" data-index="3">
+<div class="relative z-10 mt-1.5 flex-shrink-0">
+<div class="timeline-node w-10 h-10 rounded-full bg-[#050A15] border-2 border-white/20 flex items-center justify-center transition-all duration-500">
+<span class="material-symbols-outlined text-gray-500 text-xl transition-colors duration-500">school</span>
+</div>
+</div>
+<div class="flex-1 glass-panel p-6 rounded-xl hover:bg-surface-dark/80 transition-all hover:border-primary/50 duration-300 group-hover:translate-x-2 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
+<div class="flex justify-between items-start mb-2 flex-wrap gap-2 relative z-10">
+<div>
+<h3 class="text-xl font-bold text-white">Diploma in Electronics and Communication Engineering</h3>
+<p class="text-primary font-medium">Aditya Engineering College</p>
+<p class="text-gray-500 text-xs mt-0.5">Surampalem, Andhra Pradesh</p>
+</div>
+<span class="text-xs font-mono py-1 px-2 rounded bg-white/5 text-gray-300 border border-white/10">Sep 2021</span>
+</div>
+<p class="text-gray-400 text-sm mb-4 font-body leading-relaxed relative z-10">
+                                    Graduated with 89.9% - Specialized in Electronics and Communication Engineering with focus on signal processing and embedded systems.
+                                </p>
+<div class="flex flex-wrap gap-2 relative z-10">
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">ECE</span>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-blue-300 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20">89.9%</span>
+</div>
+</div>
+</div>
+<div class="relative flex gap-6">
+<div class="relative z-10 flex-shrink-0 ml-[15px]">
+<div class="w-3 h-3 rounded-full bg-gray-700"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="relative flex flex-col justify-center items-center lg:items-end lg:h-[calc(100vh-150px)] lg:sticky lg:top-24">
+<div class="w-full text-right mb-8 hidden lg:block">
+<h2 class="text-2xl font-bold text-white tracking-tighter">TECHNICAL <span class="text-accent-cyan">ARSENAL</span></h2>
+<p class="text-sm text-gray-500 font-mono flex justify-end items-center gap-2">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                        SYSTEM_STATUS: ONLINE
+                    </p>
+</div>
+<div class="relative w-full max-w-[500px] aspect-square animate-float">
+<div class="absolute inset-0 bg-primary/20 blur-[80px] rounded-full animate-pulse-slow"></div>
+<div class="relative w-full h-full p-4">
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-30 z-0">
+<defs>
+<linearGradient id="lineGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#1152d4;stop-opacity:0"></stop>
+<stop offset="50%" style="stop-color:#00f0ff;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#1152d4;stop-opacity:0"></stop>
+</linearGradient>
+</defs>
+<line stroke="url(#lineGrad)" stroke-width="1" x1="50%" x2="35%" y1="35%" y2="15%"></line>
+<line stroke="url(#lineGrad)" stroke-width="1" x1="50%" x2="15%" y1="35%" y2="30%"></line>
+<line stroke="url(#lineGrad)" stroke-width="1" x1="50%" x2="85%" y1="35%" y2="30%"></line>
+<line stroke="url(#lineGrad)" stroke-width="1" x1="50%" x2="25%" y1="35%" y2="55%"></line>
+<line stroke="url(#lineGrad)" stroke-width="1" x1="50%" x2="75%" y1="35%" y2="55%"></line>
+<line stroke="url(#lineGrad)" stroke-width="1" x1="50%" x2="50%" y1="35%" y2="70%"></line>
+</svg>
+<div class="absolute top-[5%] left-[30%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-24 h-28 hexagon bg-surface-dark border-2 border-primary/30 flex flex-col items-center justify-center relative group-hover:border-accent-cyan group-hover:shadow-neon transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl text-white mb-1 group-hover:text-accent-cyan transition-colors">code</span>
+<span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Python</span>
+</div>
+</div>
+<div class="absolute top-[20%] left-[10%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-24 h-28 hexagon bg-surface-dark border-2 border-primary/30 flex flex-col items-center justify-center relative group-hover:border-accent-cyan group-hover:shadow-neon transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl text-white mb-1 group-hover:text-accent-cyan transition-colors">neurology</span>
+<span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">PyTorch</span>
+</div>
+</div>
+<div class="absolute top-[20%] left-[50%] -translate-x-1/2 hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-28 h-32 hexagon bg-surface-dark/90 border-2 border-accent-cyan flex flex-col items-center justify-center relative shadow-neon transition-all backdrop-blur-md z-10">
+<span class="material-symbols-outlined text-5xl text-accent-cyan mb-1 animate-pulse">psychology</span>
+<span class="text-xs text-white font-bold tracking-widest uppercase">AI Core</span>
+</div>
+<div class="absolute -bottom-16 left-1/2 -translate-x-1/2 w-48 p-2 bg-black/90 border border-accent-cyan text-center rounded text-xs text-accent-cyan opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30 shadow-[0_0_20px_rgba(0,240,255,0.2)]">
+                                Neural Networks &amp; Deep Learning Specialist
+                            </div>
+</div>
+<div class="absolute top-[20%] right-[5%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-24 h-28 hexagon bg-surface-dark border-2 border-primary/30 flex flex-col items-center justify-center relative group-hover:border-accent-cyan group-hover:shadow-neon transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl text-white mb-1 group-hover:text-accent-cyan transition-colors">cloud</span>
+<span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">AWS</span>
+</div>
+</div>
+<div class="absolute top-[45%] left-[20%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-24 h-28 hexagon bg-surface-dark border-2 border-primary/30 flex flex-col items-center justify-center relative group-hover:border-accent-cyan group-hover:shadow-neon transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl text-white mb-1 group-hover:text-accent-cyan transition-colors">deployed_code</span>
+<span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Docker</span>
+</div>
+</div>
+<div class="absolute top-[45%] right-[15%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-24 h-28 hexagon bg-surface-dark border-2 border-primary/30 flex flex-col items-center justify-center relative group-hover:border-accent-cyan group-hover:shadow-neon transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl text-white mb-1 group-hover:text-accent-cyan transition-colors">dataset</span>
+<span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">SQL</span>
+</div>
+</div>
+<div class="absolute top-[60%] left-[45%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-24 h-28 hexagon bg-surface-dark border-2 border-primary/30 flex flex-col items-center justify-center relative group-hover:border-accent-cyan group-hover:shadow-neon transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl text-white mb-1 group-hover:text-accent-cyan transition-colors">link</span>
+<span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">LangChain</span>
+</div>
+</div>
+<div class="absolute top-[75%] left-[25%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-24 h-28 hexagon bg-surface-dark border-2 border-purple-500/30 flex flex-col items-center justify-center relative group-hover:border-purple-400 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.6)] transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl text-white mb-1 group-hover:text-purple-400 transition-colors">database</span>
+<span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">RAG</span>
+</div>
+</div>
+<div class="absolute top-[75%] right-[20%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-24 h-28 hexagon bg-surface-dark border-2 border-emerald-500/30 flex flex-col items-center justify-center relative group-hover:border-emerald-400 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.6)] transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl text-white mb-1 group-hover:text-emerald-400 transition-colors">hub</span>
+<span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Agentic AI</span>
+</div>
+</div>
+<div class="absolute top-[5%] left-[50%] -translate-x-1/2 hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-20 h-24 hexagon bg-surface-dark border-2 border-yellow-500/30 flex flex-col items-center justify-center relative group-hover:border-yellow-400 group-hover:shadow-[0_0_15px_rgba(234,179,8,0.6)] transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-3xl text-white mb-1 group-hover:text-yellow-400 transition-colors">auto_awesome</span>
+<span class="text-[9px] text-gray-400 font-bold tracking-widest uppercase">LLM</span>
+</div>
+</div>
+<div class="absolute top-[30%] left-[35%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-20 h-24 hexagon bg-surface-dark border-2 border-pink-500/30 flex flex-col items-center justify-center relative group-hover:border-pink-400 group-hover:shadow-[0_0_15px_rgba(236,72,153,0.6)] transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-3xl text-white mb-1 group-hover:text-pink-400 transition-colors">dataset</span>
+<span class="text-[9px] text-gray-400 font-bold tracking-widest uppercase">SFT</span>
+</div>
+</div>
+<div class="absolute top-[30%] right-[30%] hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-20 h-24 hexagon bg-surface-dark border-2 border-cyan-500/30 flex flex-col items-center justify-center relative group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.6)] transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-3xl text-white mb-1 group-hover:text-cyan-400 transition-colors">trending_up</span>
+<span class="text-[9px] text-gray-400 font-bold tracking-widest uppercase">RLHF</span>
+</div>
+</div>
+<div class="absolute top-[50%] left-[50%] -translate-x-1/2 hover:z-20 group transition-all duration-500 hover:scale-110 cursor-default">
+<div class="w-20 h-24 hexagon bg-surface-dark border-2 border-indigo-500/30 flex flex-col items-center justify-center relative group-hover:border-indigo-400 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.6)] transition-all bg-opacity-90 backdrop-blur-sm">
+<span class="material-symbols-outlined text-3xl text-white mb-1 group-hover:text-indigo-400 transition-colors">psychology</span>
+<span class="text-[9px] text-gray-400 font-bold tracking-widest uppercase">RLMF</span>
+</div>
+</div>
+<div class="absolute top-[10%] right-[25%] w-16 h-20 hexagon border border-white/5 bg-white/5 opacity-50 blur-[1px]"></div>
+<div class="absolute top-[55%] left-[5%] w-12 h-14 hexagon border border-white/5 bg-white/5 opacity-30 blur-[2px]"></div>
+<div class="absolute bottom-[10%] right-[35%] w-20 h-24 hexagon border border-white/5 bg-white/5 opacity-40"></div>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-4 mt-8 w-full max-w-lg">
+<div class="bg-surface-dark/50 border border-white/10 rounded-lg p-3 text-center hover:bg-white/5 transition-colors">
+<div class="text-2xl font-bold text-white">4+</div>
+<div class="text-[10px] text-gray-500 uppercase tracking-wider">Years Exp</div>
+</div>
+<div class="bg-surface-dark/50 border border-white/10 rounded-lg p-3 text-center hover:bg-white/5 transition-colors">
+<div class="text-2xl font-bold text-white">3</div>
+<div class="text-[10px] text-gray-500 uppercase tracking-wider">Companies</div>
+</div>
+<div class="bg-surface-dark/50 border border-white/10 rounded-lg p-3 text-center hover:bg-white/5 transition-colors">
+<div class="text-2xl font-bold text-white">15+</div>
+<div class="text-[10px] text-gray-500 uppercase tracking-wider">Projects</div>
+</div>
+<div class="bg-surface-dark/50 border border-white/10 rounded-lg p-3 text-center hover:bg-white/5 transition-colors">
+<div class="text-2xl font-bold text-white">100%</div>
+<div class="text-[10px] text-gray-500 uppercase tracking-wider">Deployment</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="w-full py-12 border-t border-white/5 bg-[#020203] relative z-10">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col gap-1">
+<span class="text-white font-serif text-lg">Srinivas Nallamati</span>
+<p class="text-slate-600 text-xs">© 2024. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://github.com/srinivas600" target="_blank">GitHub</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://linkedin.com/in/srinivas-nallamati" target="_blank">LinkedIn</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="contact.html">Contact</a>
+</div>
+</div>
+</footer>
+<script>
+        // Background Scroll Animation
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const gridPlane = document.getElementById('grid-plane');
+            const shapes = document.querySelectorAll('.scroll-shape');
+            // Move grid
+            if (gridPlane) {
+                gridPlane.style.transform = `rotateX(60deg) translateY(${scrollY * 0.5}px)`;
+            }
+            // Move parallax shapes
+            shapes.forEach(shape => {
+                const speed = shape.getAttribute('data-speed');
+                shape.style.transform = `translateY(${scrollY * speed}px) rotate(${scrollY * 0.1}deg)`;
+            });
+        });
+        // Timeline Interaction Observer
+        document.addEventListener("DOMContentLoaded", () => {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            const timelineNodes = document.querySelectorAll('.timeline-node');
+            const timelineFill = document.getElementById('timeline-fill');
+            const timelineContainer = document.querySelector('.timeline-container');
+            // Calculate height for line fill
+            const updateLineFill = () => {
+                const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight));
+                // Simple mapping for this specific layout, can be more robust for longer pages
+                let height = Math.min(scrollPercentage * 300, 100); 
+                if (timelineFill) {
+                   // A simpler approach for just two items: light them up individually
+                }
+            };
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -20% 0px', // Activate when element is near center of viewport
+                threshold: 0.5
+            };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const index = entry.target.getAttribute('data-index');
+                    const node = timelineNodes[index];
+                    if (entry.isIntersecting) {
+                        node.classList.add('scroll-active-node');
+                        // Expand the line to this node roughly
+                        if(index == 0) timelineFill.style.height = "12%";
+                        if(index == 1) timelineFill.style.height = "40%";
+                        if(index == 2) timelineFill.style.height = "68%";
+                        if(index == 3) timelineFill.style.height = "95%";
+                    } else {
+                        node.classList.remove('scroll-active-node');
+                    }
+                });
+            }, observerOptions);
+            timelineItems.forEach(item => {
+                observer.observe(item);
+            });
+            // Initial trigger
+            const firstNode = timelineNodes[0];
+            if(firstNode) firstNode.classList.add('scroll-active-node');
+            if(timelineFill) timelineFill.style.height = "15%";
+        });
+    </script>
+
+</body></html>
+
