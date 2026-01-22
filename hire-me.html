@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hire Me - Srinivas Nallamati</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6",
+                        "accent": "#6366f1",
+                        "background-dark": "#020203",
+                        "surface": "#0a0a0c",
+                        "glass": "rgba(255, 255, 255, 0.03)",
+                        "glass-strong": "rgba(10, 10, 12, 0.7)",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                    },
+                    fontFamily: {
+                        "serif": ["Playfair Display", "serif"],
+                        "sans": ["Space Grotesk", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px)",
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020203; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444; 
+        }
+        body {
+            background-color: #020203;
+            color: #ffffff;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        @keyframes reveal-up {
+            0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .reveal-on-scroll {
+            animation: reveal-up 0.8s ease-out forwards;
+            opacity: 0;
+            animation-delay: 0.2s;
+        }
+        @supports (animation-timeline: view()) {
+            .reveal-on-scroll {
+                animation: reveal-up linear both;
+                animation-timeline: view();
+                animation-range: entry 10% cover 25%;
+                opacity: 0; 
+                animation-delay: 0s;
+            }
+        }
+        .form-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans overflow-x-hidden selection:bg-primary selection:text-white">
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<div class="absolute inset-0 bg-background-dark bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900/40 via-background-dark to-background-dark"></div>
+<div class="absolute inset-0 bg-grid-pattern opacity-[0.03] mask-image-gradient"></div>
+<div class="absolute top-[10%] right-[15%] w-64 h-64 rounded-full bg-primary/5 blur-[80px] mix-blend-screen animate-[pulse_8s_infinite]"></div>
+<div class="absolute top-[40%] left-[10%] w-96 h-96 rounded-full bg-indigo-900/10 blur-[100px] mix-blend-screen"></div>
+<div class="absolute bottom-[20%] right-[20%] w-80 h-80 rounded-full bg-blue-900/10 blur-[90px] mix-blend-screen"></div>
+</div>
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="mt-4 rounded-full border border-white/5 bg-glass-strong backdrop-blur-md px-6 py-3 flex items-center justify-between shadow-2xl">
+<div class="flex items-center gap-3">
+<a href="index.html" class="flex items-center gap-3">
+<div class="flex items-center justify-center size-8 rounded-full bg-white/5 border border-white/10 text-white">
+<span class="font-serif font-bold italic text-sm">SN</span>
+</div>
+<span class="text-slate-200 text-sm font-serif italic tracking-wide">Srinivas N.</span>
+</a>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="about.html">About</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="experience.html">Experience</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="projects.html">Projects</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="contact.html">Contact</a>
+</nav>
+<a href="hire-me.html" class="group bg-white text-black hover:bg-slate-200 text-xs font-bold uppercase tracking-wider py-2 px-5 rounded-full transition-all flex items-center gap-2">
+<span>Hire me</span>
+<span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<main class="relative z-10 flex flex-col items-center w-full pt-32 pb-12 min-h-screen">
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 w-full">
+<section class="mb-20 reveal-on-scroll">
+<div class="text-center mb-16">
+<h1 class="text-5xl lg:text-7xl font-serif italic text-white leading-tight mb-6">
+                        Let's Work <span class="not-italic font-sans font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-400 to-indigo-400">Together</span>
+                    </h1>
+<p class="text-lg lg:text-xl text-slate-400 leading-relaxed font-light max-w-2xl mx-auto">
+                        Looking for an AI Engineer to bring your vision to life? I specialize in RLMF, RAG architectures, and autonomous agent systems. Let's discuss how I can help your team.
+                    </p>
+</div>
+<div class="glass-panel rounded-2xl p-8 lg:p-12 reveal-on-scroll" style="animation-delay: 0.1s;">
+<h2 class="text-2xl font-serif italic text-white mb-8 flex items-center gap-4">
+<span class="h-[1px] w-12 bg-primary"></span>
+                        Get in Touch
+                    </h2>
+<form class="space-y-6" action="mailto:srinivasnallamati987@gmail.com" method="post" enctype="text/plain">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label for="name" class="block text-sm font-medium text-slate-300 mb-2">Name *</label>
+<input type="text" id="name" name="name" required class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-slate-500" placeholder="Your name"/>
+</div>
+<div>
+<label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email *</label>
+<input type="email" id="email" name="email" required class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-slate-500" placeholder="your.email@company.com"/>
+</div>
+</div>
+<div>
+<label for="company" class="block text-sm font-medium text-slate-300 mb-2">Company / Organization</label>
+<input type="text" id="company" name="company" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-slate-500" placeholder="Company name"/>
+</div>
+<div>
+<label for="role" class="block text-sm font-medium text-slate-300 mb-2">Role Type</label>
+<select id="role" name="role" class="form-input w-full px-4 py-3 rounded-lg text-white">
+<option value="">Select a role type</option>
+<option value="full-time">Full-time Position</option>
+<option value="contract">Contract / Freelance</option>
+<option value="consulting">Consulting Project</option>
+<option value="collaboration">Research Collaboration</option>
+</select>
+</div>
+<div>
+<label for="message" class="block text-sm font-medium text-slate-300 mb-2">Project Details *</label>
+<textarea id="message" name="message" rows="6" required class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-slate-500 resize-none" placeholder="Tell me about your project, requirements, timeline, and what you're looking for..."></textarea>
+</div>
+<div class="flex items-start gap-3">
+<input type="checkbox" id="availability" name="availability" class="mt-1 w-4 h-4 rounded border-white/20 bg-white/5 text-primary focus:ring-primary"/>
+<label for="availability" class="text-sm text-slate-400">
+                        I'm open to discussing availability and compensation details
+                    </label>
+</div>
+<button type="submit" class="group w-full bg-primary hover:bg-blue-600 text-white text-sm font-sans uppercase tracking-widest font-bold h-14 px-8 rounded-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+<span>Send Inquiry</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 reveal-on-scroll" style="animation-delay: 0.2s;">
+<div class="glass-panel rounded-2xl p-8">
+<h3 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">work_history</span>
+                        What I Bring
+                    </h3>
+<ul class="space-y-3 text-slate-300">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+<span class="text-sm">Expertise in RLMF, RAG, and Multi-Agent Systems</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+<span class="text-sm">Production-ready AI solutions with proven results</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+<span class="text-sm">Experience with AWS, PyTorch, LangChain ecosystem</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+<span class="text-sm">Strong focus on scalability and performance optimization</span>
+</li>
+</ul>
+</div>
+<div class="glass-panel rounded-2xl p-8">
+<h3 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">schedule</span>
+                        Response Time
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                        I typically respond to inquiries within 24-48 hours. For urgent matters, feel free to reach out via WhatsApp, LinkedIn or email directly.
+                    </p>
+                    <div class="flex flex-wrap items-center gap-4 pt-4 border-t border-white/10">
+                    <a href="mailto:srinivasnallamati987@gmail.com" class="flex items-center gap-2 text-primary hover:text-blue-400 transition-colors text-sm font-medium">
+                    <span class="material-symbols-outlined text-lg">mail</span>
+Email Directly
+</a>
+<a href="https://wa.me/7013725286" target="_blank" class="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors text-sm font-medium">
+<span class="material-symbols-outlined text-lg">chat</span>
+WhatsApp
+</a>
+<a href="https://linkedin.com/in/srinivas-nallamati" target="_blank" class="flex items-center gap-2 text-primary hover:text-blue-400 transition-colors text-sm font-medium">
+<span class="material-symbols-outlined text-lg">work</span>
+LinkedIn
+</a>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<footer class="w-full py-12 border-t border-white/5 bg-[#020203] relative z-10">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col gap-1">
+<span class="text-white font-serif text-lg">Srinivas Nallamati</span>
+<p class="text-slate-600 text-xs">© 2024. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://github.com/srinivas600" target="_blank">GitHub</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://linkedin.com/in/srinivas-nallamati" target="_blank">LinkedIn</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="contact.html">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>
+

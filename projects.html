@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Srinivas Nallamati - Projects</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6",
+                        "accent": "#6366f1",
+                        "background-dark": "#020203",
+                        "surface": "#0a0a0c",
+                        "glass": "rgba(255, 255, 255, 0.03)",
+                        "glass-strong": "rgba(10, 10, 12, 0.7)",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "primary-glow": "#3b82f6",
+                        "background-light": "#f6f6f8",
+                        "card-dark": "#0a0a0a",
+                    },
+                    fontFamily: {
+                        "serif": ["Playfair Display", "serif"],
+                        "sans": ["Space Grotesk", "sans-serif"],
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px)",
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                },
+            },
+        }
+    </script>
+<style>body {
+            background-color: #050505;
+        }
+        .glass-panel {
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glass-panel:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(15, 20, 30, 0.6);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.15), inset 0 0 20px rgba(37, 99, 235, 0.05);
+        }
+        .glass-panel:hover .view-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .grid-bg {
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+        }@keyframes reveal-card {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) scale(0.9);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+        @keyframes float-wireframe {
+            0% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(-20px) rotate(5deg) scale(1.05); }
+            100% { transform: translateY(0) rotate(0deg) scale(1); }
+        }
+        @keyframes bg-scroll-move {
+            0% { transform: translateY(0) rotateX(0); }
+            100% { transform: translateY(-20%) rotateX(10deg); }
+        }@supports (animation-timeline: view()) {
+            .scroll-card {
+                animation: reveal-card linear both;
+                animation-timeline: view();
+                animation-range: entry 5% cover 30%;
+            }
+            .scroll-bg-element {
+                animation: bg-scroll-move linear both;
+                animation-timeline: scroll();
+            }
+        }.wireframe-cube {
+            position: absolute;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transform-style: preserve-3d;
+        }
+        .data-stream-line {
+            position: absolute;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(59, 130, 246, 0.5), transparent);
+            animation: drop 3s infinite linear;
+        }
+        @keyframes drop {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="font-sans overflow-x-hidden selection:bg-primary selection:text-white" style="background-color: #020203; color: #ffffff;">
+<div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-[#020617] via-[#050505] to-[#000000]"></div>
+<div class="absolute inset-0 bg-grid-pattern opacity-[0.07] grid-bg scroll-bg-element origin-top"></div>
+<div class="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-blue-900/10 rounded-full blur-[120px] animate-pulse"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/5 rounded-full blur-[150px]"></div>
+<div class="scroll-bg-element absolute top-[20%] left-[10%] w-64 h-64 border border-white/5 rounded-full blur-sm transform rotate-45"></div>
+<div class="scroll-bg-element absolute top-[40%] right-[15%] w-96 h-96 border border-primary/10 rounded-full blur-md opacity-30"></div>
+<div class="scroll-bg-element absolute bottom-[10%] left-[20%] w-[500px] h-[500px] border border-white/5 rounded-full opacity-20 transform -rotate-12"></div>
+<div class="absolute inset-0 opacity-20">
+<div class="data-stream-line h-[200px] left-[10%] animation-delay-0"></div>
+<div class="data-stream-line h-[150px] left-[30%] animation-delay-2000" style="animation-delay: 2s"></div>
+<div class="data-stream-line h-[300px] left-[60%] animation-delay-1000" style="animation-delay: 1s"></div>
+<div class="data-stream-line h-[250px] left-[85%] animation-delay-3000" style="animation-delay: 3s"></div>
+</div>
+</div>
+<div class="relative z-10 flex min-h-screen w-full flex-col">
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="mt-4 rounded-full border border-white/5 bg-glass-strong backdrop-blur-md px-6 py-3 flex items-center justify-between shadow-2xl">
+<div class="flex items-center gap-3">
+<a href="index.html" class="flex items-center gap-3">
+<div class="flex items-center justify-center size-8 rounded-full bg-white/5 border border-white/10 text-white">
+<span class="font-serif font-bold italic text-sm">SN</span>
+</div>
+<span class="text-slate-200 text-sm font-serif italic tracking-wide">Srinivas N.</span>
+</a>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="about.html">About</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="experience.html">Experience</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="projects.html">Projects</a>
+<a class="text-xs font-sans uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-300" href="contact.html">Contact</a>
+</nav>
+<a href="hire-me.html" class="group bg-white text-black hover:bg-slate-200 text-xs font-bold uppercase tracking-wider py-2 px-5 rounded-full transition-all flex items-center gap-2">
+<span>Hire me</span>
+<span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<div class="pt-24">
+<main class="flex-grow px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+<div class="mx-auto max-w-7xl">
+<div class="mb-20 md:mb-24 scroll-card">
+<div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+<div class="space-y-4">
+<h2 class="text-xs font-bold uppercase tracking-[0.2em] text-blue-400/80">Selected Projects</h2>
+<h1 class="text-5xl md:text-7xl font-bold leading-tight tracking-tighter text-white">
+                                Engineering <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-200 to-white drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">Intelligence</span>
+</h1>
+<p class="max-w-2xl text-lg text-gray-400/80 font-light leading-relaxed">
+                                High-performance AI systems, LLM optimization, and autonomous agent architectures designed for the next generation of computing.
+                            </p>
+</div>
+<div class="hidden md:block pb-2">
+<div class="flex items-center gap-3 text-sm text-gray-500 border border-white/5 rounded-full px-4 py-2 bg-white/5 backdrop-blur-sm">
+<span class="material-symbols-outlined text-lg animate-bounce">arrow_downward</span>
+<span>Scroll to explore</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 perspective-1000">
+<div class="scroll-card group glass-panel relative flex flex-col justify-between overflow-hidden rounded-xl p-6 h-[340px]">
+<div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute top-0 right-0 p-5 opacity-40 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110 group-hover:text-primary-glow">
+<span class="material-symbols-outlined text-white text-3xl">chat_bubble</span>
+</div>
+<div class="space-y-4 z-10 mt-2">
+<h3 class="text-xl font-bold leading-tight text-white group-hover:text-blue-200 transition-colors">Financial RAG Architecture</h3>
+<p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors line-clamp-3 leading-relaxed">Real-time stock forecasting system leveraging hybrid search retrieval and LLM context window optimization.</p>
+<div class="flex flex-wrap gap-2 pt-4">
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">LangChain</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">Chroma DB</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">OpenAI</span>
+</div>
+</div>
+<div class="view-btn absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 transition-all duration-500 ease-out z-20">
+<a href="project-1.html" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary hover:bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-primary/20 transition-all">
+<span>View Case Study</span>
+<span class="material-symbols-outlined text-sm">arrow_outward</span>
+</a>
+</div>
+</div>
+<div class="scroll-card group glass-panel relative flex flex-col justify-between overflow-hidden rounded-xl p-6 h-[340px]">
+<div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute top-0 right-0 p-5 opacity-40 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110 group-hover:text-primary-glow">
+<span class="material-symbols-outlined text-white text-3xl">code_blocks</span>
+</div>
+<div class="space-y-4 z-10 mt-2">
+<h3 class="text-xl font-bold leading-tight text-white group-hover:text-blue-200 transition-colors">Legal RAG Pipeline</h3>
+<p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors line-clamp-3 leading-relaxed">A high-precision retrieval system designed for 500+ page legal briefs. Engineered to minimize hallucinations through "Ask-to-Answer" framing and strict citation enforcement.</p>
+<div class="flex flex-wrap gap-2 pt-4">
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">HuggingFace</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">LoRA</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">PyTorch</span>
+</div>
+</div>
+<div class="view-btn absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 transition-all duration-500 ease-out z-20">
+<a href="project-2.html" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary hover:bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-primary/20 transition-all">
+<span>View Case Study</span>
+<span class="material-symbols-outlined text-sm">arrow_outward</span>
+</a>
+</div>
+</div>
+<div class="scroll-card group glass-panel relative flex flex-col justify-between overflow-hidden rounded-xl p-6 h-[340px]">
+<div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute top-0 right-0 p-5 opacity-40 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110 group-hover:text-primary-glow">
+<span class="material-symbols-outlined text-white text-3xl">psychology</span>
+</div>
+<div class="space-y-4 z-10 mt-2">
+<h3 class="text-xl font-bold leading-tight text-white group-hover:text-blue-200 transition-colors">RLHF Multi-Agent Framework</h3>
+<p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors line-clamp-3 leading-relaxed">Orchestrating complex agent interactions with Proximal Policy Optimization (PPO) training cycles and strict safety alignment protocols defined by constitutional AI principles.</p>
+<div class="flex flex-wrap gap-2 pt-4">
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">AutoGPT</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">Selenium</span>
+</div>
+</div>
+<div class="view-btn absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 transition-all duration-500 ease-out z-20">
+<a href="project-3.html" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary hover:bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-primary/20 transition-all">
+<span>View Case Study</span>
+<span class="material-symbols-outlined text-sm">arrow_outward</span>
+</a>
+</div>
+</div>
+<div class="scroll-card group glass-panel relative flex flex-col justify-between overflow-hidden rounded-xl p-6 h-[340px]">
+<div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute top-0 right-0 p-5 opacity-40 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110 group-hover:text-primary-glow">
+<span class="material-symbols-outlined text-white text-3xl">dataset</span>
+</div>
+<div class="space-y-4 z-10 mt-2">
+<h3 class="text-xl font-bold leading-tight text-white group-hover:text-blue-200 transition-colors">Multimodal RLMF Dataset</h3>
+<p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors line-clamp-3 leading-relaxed">Automating alignment with Teacher Models to scale reinforcement learning feedback by 100x. A self-improving loop for 3D asset generation.</p>
+<div class="flex flex-wrap gap-2 pt-4">
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">Python</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">Pandas</span>
+</div>
+</div>
+<div class="view-btn absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 transition-all duration-500 ease-out z-20">
+<a href="project-4.html" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary hover:bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-primary/20 transition-all">
+<span>View Case Study</span>
+<span class="material-symbols-outlined text-sm">arrow_outward</span>
+</a>
+</div>
+</div>
+<div class="scroll-card group glass-panel relative flex flex-col justify-between overflow-hidden rounded-xl p-6 h-[340px]">
+<div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute top-0 right-0 p-5 opacity-40 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110 group-hover:text-primary-glow">
+<span class="material-symbols-outlined text-white text-3xl">schema</span>
+</div>
+<div class="space-y-4 z-10 mt-2">
+<h3 class="text-xl font-bold leading-tight text-white group-hover:text-blue-200 transition-colors">A2A Core Integration Logic</h3>
+<p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors line-clamp-3 leading-relaxed">Bridging Vector Knowledge with Agentic Execution. An interactive visualization of the API layer, latency optimizations, and cross-project connectivity mesh.</p>
+<div class="flex flex-wrap gap-2 pt-4">
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">SQL</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">Apache Spark</span>
+</div>
+</div>
+<div class="view-btn absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 transition-all duration-500 ease-out z-20">
+<a href="project-5.html" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary hover:bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-primary/20 transition-all">
+<span>View Case Study</span>
+<span class="material-symbols-outlined text-sm">arrow_outward</span>
+</a>
+</div>
+</div>
+<div class="scroll-card group glass-panel relative flex flex-col justify-between overflow-hidden rounded-xl p-6 h-[340px]">
+<div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute top-0 right-0 p-5 opacity-40 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110 group-hover:text-primary-glow">
+<span class="material-symbols-outlined text-white text-3xl">hub</span>
+</div>
+<div class="space-y-4 z-10 mt-2">
+<h3 class="text-xl font-bold leading-tight text-white group-hover:text-blue-200 transition-colors">Cyber-Threat SFT Dataset</h3>
+<p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors line-clamp-3 leading-relaxed">A large-scale, synthetic dataset designed to train LLMs for zero-day exploit detection. Utilizing a multi-stage pipeline involving GPT-4 generation and adversarial red-teaming.</p>
+<div class="flex flex-wrap gap-2 pt-4">
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">Anthropic</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">Node.js</span>
+</div>
+</div>
+<div class="view-btn absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 transition-all duration-500 ease-out z-20">
+<a href="project-6.html" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary hover:bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-primary/20 transition-all">
+<span>View Case Study</span>
+<span class="material-symbols-outlined text-sm">arrow_outward</span>
+</a>
+</div>
+</div>
+<div class="scroll-card group glass-panel relative flex flex-col justify-between overflow-hidden rounded-xl p-6 h-[340px]">
+<div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute top-0 right-0 p-5 opacity-40 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110 group-hover:text-primary-glow">
+<span class="material-symbols-outlined text-white text-3xl">search</span>
+</div>
+<div class="space-y-4 z-10 mt-2">
+<h3 class="text-xl font-bold leading-tight text-white group-hover:text-blue-200 transition-colors">ASI Dataset for Medical Reasoning</h3>
+<p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors line-clamp-3 leading-relaxed">High-fidelity supervised fine-tuning dataset designed to align Large Language Models with expert clinical reasoning paths.</p>
+<div class="flex flex-wrap gap-2 pt-4">
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">Weaviate</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">Docker</span>
+</div>
+</div>
+<div class="view-btn absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 transition-all duration-500 ease-out z-20">
+<a href="project-7.html" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary hover:bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-primary/20 transition-all">
+<span>View Case Study</span>
+<span class="material-symbols-outlined text-sm">arrow_outward</span>
+</a>
+</div>
+</div>
+<div class="scroll-card group glass-panel relative flex flex-col justify-between overflow-hidden rounded-xl p-6 h-[340px]">
+<div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute top-0 right-0 p-5 opacity-40 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110 group-hover:text-primary-glow">
+<span class="material-symbols-outlined text-white text-3xl">autorenew</span>
+</div>
+<div class="space-y-4 z-10 mt-2">
+<h3 class="text-xl font-bold leading-tight text-white group-hover:text-blue-200 transition-colors">Real-time Voice AI Pipeline</h3>
+<p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors line-clamp-3 leading-relaxed">A sub-second latency conversational agent using WebSocket-optimized streams. Features custom Voice Activity Detection (VAD) and a retrieval-augmented generation loop.</p>
+<div class="flex flex-wrap gap-2 pt-4">
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">AWS SageMaker</span>
+<span class="inline-flex items-center rounded bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-gray-300 border border-white/10 group-hover:border-primary/30 transition-colors">MLFlow</span>
+</div>
+</div>
+<div class="view-btn absolute bottom-6 left-6 right-6 translate-y-4 opacity-0 transition-all duration-500 ease-out z-20">
+<a href="project-8.html" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary hover:bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-primary/20 transition-all">
+<span>View Case Study</span>
+<span class="material-symbols-outlined text-sm">arrow_outward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="w-full py-12 border-t border-white/5 bg-[#020203] relative z-10">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col gap-1">
+<span class="text-white font-serif text-lg">Srinivas Nallamati</span>
+<p class="text-slate-600 text-xs">© 2024. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://github.com/srinivas600" target="_blank">GitHub</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="https://linkedin.com/in/srinivas-nallamati" target="_blank">LinkedIn</a>
+<a class="text-slate-500 hover:text-white transition-colors text-sm uppercase tracking-wider" href="contact.html">Contact</a>
+</div>
+</div>
+</footer>
+</div>
+
+</body></html>
+

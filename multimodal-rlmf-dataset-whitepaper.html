@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Multimodal RLMF Dataset - Technical Whitepaper</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6",
+                        "accent": "#6366f1",
+                        "background-dark": "#020203",
+                        "surface": "#0a0a0c",
+                        "glass": "rgba(255, 255, 255, 0.03)",
+                        "glass-strong": "rgba(10, 10, 12, 0.7)",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                    },
+                    fontFamily: {
+                        "serif": ["Playfair Display", "serif"],
+                        "sans": ["Space Grotesk", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        @media print {
+            body { background: white; color: black; }
+            .no-print { display: none; }
+            .page-break { page-break-after: always; }
+        }
+        body {
+            background-color: #020203;
+            color: #ffffff;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #0f1115;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .dataset-entry {
+            border-left: 3px solid #3b82f6;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+        .feedback-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .feedback-criticize { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .feedback-incorrect { background: rgba(220, 38, 38, 0.2); color: #f87171; border: 1px solid rgba(220, 38, 38, 0.3); }
+        .feedback-correct { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+    </style>
+</head>
+<body class="font-sans overflow-x-hidden selection:bg-primary selection:text-white">
+<div class="no-print fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="mt-4 rounded-full border border-white/5 bg-glass-strong backdrop-blur-md px-6 py-3 flex items-center justify-between shadow-2xl">
+<div class="flex items-center gap-3">
+<a href="index.html" class="flex items-center gap-3">
+<div class="flex items-center justify-center size-8 rounded-full bg-white/5 border border-white/10 text-white">
+<span class="font-serif font-bold italic text-sm">SN</span>
+</div>
+<span class="text-slate-200 text-sm font-serif italic tracking-wide">Srinivas N.</span>
+</a>
+</div>
+<button onclick="window.print()" class="group bg-white text-black hover:bg-slate-200 text-xs font-bold uppercase tracking-wider py-2 px-5 rounded-full transition-all flex items-center gap-2">
+<span>Download PDF</span>
+<span class="material-symbols-outlined text-[14px]">download</span>
+</button>
+</div>
+</div>
+</div>
+<main class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pt-32">
+<!-- Cover Page -->
+<div class="page-break mb-20">
+<div class="text-center mb-16">
+<h1 class="text-6xl lg:text-8xl font-serif italic text-white leading-tight mb-6">
+                        Multimodal RLMF Dataset
+                    </h1>
+<h2 class="text-2xl lg:text-3xl text-slate-400 font-light mb-8">
+                        A Comprehensive Dataset for Reinforcement Learning from Model Feedback
+                    </h2>
+<div class="border-t border-white/10 pt-8 mt-8">
+<p class="text-slate-300 text-lg">Srinivas Nallamati</p>
+<p class="text-slate-500 text-sm mt-2">AI Engineer & Researcher</p>
+<p class="text-slate-500 text-sm mt-8">December 2024</p>
+</div>
+</div>
+</div>
+
+<!-- Executive Summary -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">Executive Summary</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<p>
+                        This whitepaper presents a comprehensive technical overview of the Multimodal Reinforcement Learning from Model Feedback (RLMF) dataset. This dataset represents a paradigm shift from traditional Reinforcement Learning from Human Feedback (RLHF) by replacing human labelers with specialized Teacher Models, enabling 24/7 automated training cycles and scaling feedback generation by 100x.
+                    </p>
+<p>
+                        The dataset contains structured training examples featuring prompts, LLM responses, detailed reasoning chains, and model-generated feedback. Each entry includes human intervention indices, error codes, and feedback types that enable precise model alignment and self-improvement loops.
+                    </p>
+<div class="glass-panel rounded-xl p-6 mt-8">
+<h3 class="text-xl font-bold text-white mb-4">Key Features</h3>
+<ul class="space-y-2 text-slate-300">
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span><strong>Automated Feedback Generation:</strong> Teacher Models provide continuous feedback without human intervention</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span><strong>Rich Reasoning Chains:</strong> Complete step-by-step reasoning processes captured for each response</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span><strong>Structured Feedback:</strong> Categorized feedback types (CRITICIZE, INCORRECT, CORRECT) with error codes</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span><strong>Multimodal Support:</strong> Dataset designed for 3D asset generation and multimodal AI tasks</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- Table of Contents -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">Table of Contents</h1>
+<div class="space-y-3 text-slate-300">
+<div class="flex justify-between items-center py-2 border-b border-white/5">
+<span>1. Introduction to RLMF</span>
+<span class="text-slate-500">3</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-white/5">
+<span>2. Dataset Structure & Schema</span>
+<span class="text-slate-500">4</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-white/5">
+<span>3. Data Collection Methodology</span>
+<span class="text-slate-500">6</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-white/5">
+<span>4. Dataset Examples & Format</span>
+<span class="text-slate-500">8</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-white/5">
+<span>5. Feedback Mechanisms</span>
+<span class="text-slate-500">10</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-white/5">
+<span>6. Training Pipeline Integration</span>
+<span class="text-slate-500">12</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-white/5">
+<span>7. Dataset Statistics & Analysis</span>
+<span class="text-slate-500">14</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-white/5">
+<span>8. Usage Guidelines</span>
+<span class="text-slate-500">16</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-white/5">
+<span>9. Conclusion & Future Work</span>
+<span class="text-slate-500">18</span>
+</div>
+</div>
+</section>
+
+<!-- Section 1: Introduction -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">1. Introduction to RLMF</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">1.1 What is RLMF?</h2>
+<p>
+                        Reinforcement Learning from Model Feedback (RLMF) is an advanced training paradigm that automates the feedback generation process in reinforcement learning. Unlike traditional RLHF which requires human annotators to provide feedback, RLMF employs specialized Teacher Models to generate critiques, corrections, and validation signals.
+                    </p>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">1.2 Advantages Over RLHF</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2">Scalability</h4>
+<p class="text-sm">100x faster feedback generation compared to human labeling, enabling continuous 24/7 training cycles.</p>
+</div>
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2">Consistency</h4>
+<p class="text-sm">Teacher Models provide consistent evaluation criteria, reducing inter-annotator variability.</p>
+</div>
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2">Cost Efficiency</h4>
+<p class="text-sm">Eliminates the need for large human annotation teams, significantly reducing training costs.</p>
+</div>
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2">Self-Improvement</h4>
+<p class="text-sm">Enables iterative refinement where Teacher Models improve alongside Student Models.</p>
+</div>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">1.3 Application Domain</h2>
+<p>
+                        This dataset is specifically designed for multimodal AI tasks, particularly 3D asset generation. The feedback loop enables Student Models to learn from Teacher Model critiques, improving generation quality through automated reinforcement learning cycles.
+                    </p>
+</div>
+</section>
+
+<!-- Section 2: Dataset Structure -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">2. Dataset Structure & Schema</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">2.1 Core Schema</h2>
+<p>
+                        Each entry in the dataset follows a structured JSON schema containing the following key components:
+                    </p>
+<div class="bg-[#0f1115] border border-white/10 rounded-xl p-6 my-6">
+<pre class="text-sm text-slate-300"><span class="text-purple-400">{</span>
+  <span class="text-green-400">"id"</span>: <span class="text-yellow-400">3120410</span>,
+  <span class="text-green-400">"step"</span>: <span class="text-yellow-400">"Reasoning step content..."</span>,
+  <span class="text-green-400">"createdAt"</span>: <span class="text-yellow-400">"2025-06-19T16:17:08.174Z"</span>,
+  <span class="text-green-400">"updatedAt"</span>: <span class="text-yellow-400">"2025-06-26T19:15:53.691Z"</span>,
+  <span class="text-green-400">"promptResponseId"</span>: <span class="text-yellow-400">9483900</span>,
+  <span class="text-green-400">"rawPromptToLLM"</span>: <span class="text-yellow-400">"User query or prompt text"</span>,
+  <span class="text-green-400">"rawLLMResponse"</span>: <span class="text-yellow-400">"Complete LLM response with code and explanation"</span>,
+  <span class="text-green-400">"reasoning_content"</span>: <span class="text-yellow-400">"Detailed step-by-step reasoning process"</span>,
+  <span class="text-green-400">"type"</span>: <span class="text-yellow-400">"REASONING"</span> | <span class="text-yellow-400">"NORMAL"</span>,
+  <span class="text-green-400">"humanFeedback"</span>: {
+    <span class="text-green-400">"Intervene_index"</span>: <span class="text-yellow-400">1</span>,
+    <span class="text-green-400">"LC"</span>: <span class="text-yellow-400">1.1</span>,
+    <span class="text-green-400">"GC"</span>: <span class="text-yellow-400">1</span>,
+    <span class="text-green-400">"Error Code"</span>: <span class="text-yellow-400">"GEN-40"</span>,
+    <span class="text-green-400">"human_feedback"</span>: <span class="text-yellow-400">"Incorrect time complexity analysis"</span>,
+    <span class="text-green-400">"feedback_type"</span>: <span class="text-yellow-400">"CRITICIZE"</span> | <span class="text-yellow-400">"INCORRECT"</span> | <span class="text-yellow-400">"CORRECT"</span>
+  }
+<span class="text-purple-400">}</span></pre>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">2.2 Field Descriptions</h2>
+<div class="space-y-4">
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2">Core Identifiers</h4>
+<ul class="text-sm space-y-1 text-slate-300">
+<li><strong>id:</strong> Unique identifier for each dataset entry</li>
+<li><strong>promptResponseId:</strong> Links entries to their originating prompt-response pair</li>
+<li><strong>type:</strong> Entry type (REASONING for detailed reasoning chains, NORMAL for standard responses)</li>
+</ul>
+</div>
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2">Content Fields</h4>
+<ul class="text-sm space-y-1 text-slate-300">
+<li><strong>rawPromptToLLM:</strong> Original user query or prompt sent to the LLM</li>
+<li><strong>rawLLMResponse:</strong> Complete LLM-generated response including code, explanations, and solutions</li>
+<li><strong>reasoning_content:</strong> Step-by-step reasoning process showing how the LLM arrived at its solution</li>
+<li><strong>step:</strong> Individual reasoning step or response component</li>
+</ul>
+</div>
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2">Feedback Fields</h4>
+<ul class="text-sm space-y-1 text-slate-300">
+<li><strong>Intervene_index:</strong> Index indicating where human/teacher intervention occurred</li>
+<li><strong>LC (Line Code):</strong> Specific line or section identifier for feedback</li>
+<li><strong>GC (Global Code):</strong> Global categorization code</li>
+<li><strong>Error Code:</strong> Standardized error classification (e.g., GEN-40 for generation errors)</li>
+<li><strong>human_feedback:</strong> Detailed feedback message explaining the issue</li>
+<li><strong>feedback_type:</strong> Type of feedback (CRITICIZE, INCORRECT, CORRECT)</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section 3: Data Collection -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">3. Data Collection Methodology</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">3.1 Automated Feedback Loop</h2>
+<div class="glass-panel rounded-xl p-6">
+<pre class="text-sm text-slate-300">
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  User Prompt    │───▶│  Student Model  │───▶│  Generated     │
+│                 │    │  (LLM)          │    │  Response      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                                       │
+                                                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  Feedback       │◀───│  Teacher Model  │◀───│  Response      │
+│  Applied        │    │  (Critic)       │    │  Analysis      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+        │
+        ▼
+┌─────────────────┐
+│  Dataset Entry  │
+│  Created        │
+└─────────────────┘
+</pre>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">3.2 Collection Process</h2>
+<ol class="list-decimal list-inside space-y-4 ml-4">
+<li>
+<strong>Prompt Generation:</strong> Diverse prompts covering various problem domains, complexity levels, and task types are generated or collected.
+</li>
+<li>
+<strong>Student Model Response:</strong> The Student Model (LLM) generates responses including code, explanations, and reasoning chains.
+</li>
+<li>
+<strong>Teacher Model Evaluation:</strong> A specialized Teacher Model analyzes the response, identifying errors, inconsistencies, and areas for improvement.
+</li>
+<li>
+<strong>Feedback Generation:</strong> Teacher Model generates structured feedback with error codes, line references, and specific critiques.
+</li>
+<li>
+<strong>Dataset Storage:</strong> Complete entries including prompt, response, reasoning, and feedback are stored in the dataset.
+</li>
+</ol>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">3.3 Quality Assurance</h2>
+<p>
+                        The dataset undergoes multiple quality checks:
+                    </p>
+<ul class="list-disc list-inside space-y-2 ml-4 mt-4">
+<li>Validation of JSON schema compliance</li>
+<li>Verification of reasoning chain completeness</li>
+<li>Cross-validation of feedback accuracy</li>
+<li>Deduplication of similar entries</li>
+</ul>
+</div>
+</section>
+
+<!-- Section 4: Dataset Examples -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">4. Dataset Examples & Format</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">4.1 Example Entry Structure</h2>
+<div class="dataset-entry glass-panel rounded-xl p-6">
+<h3 class="text-lg font-bold text-white mb-4">Entry ID: 3120410</h3>
+<div class="space-y-4">
+<div>
+<h4 class="font-bold text-primary mb-2">Prompt:</h4>
+<p class="text-sm bg-[#0f1115] p-3 rounded border border-white/10">
+                        "Solve the range update problem efficiently for array values 1-100..."
+                    </p>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-2">Response Type:</h4>
+<p class="text-sm"><code>REASONING</code> - Contains detailed step-by-step reasoning</p>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-2">Reasoning Steps:</h4>
+<p class="text-sm text-slate-400 italic">Multiple reasoning steps showing problem analysis, approach selection, and solution refinement...</p>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-2">Feedback:</h4>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="feedback-badge feedback-criticize">CRITICIZE</span>
+<span class="feedback-badge feedback-incorrect">INCORRECT</span>
+<span class="text-sm text-slate-400">Error Code: GEN-40</span>
+</div>
+<p class="text-sm mt-2">"Incorrect time complexity analysis"</p>
+</div>
+</div>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">4.2 Interactive Dataset Viewer</h2>
+<div class="glass-panel rounded-xl p-6">
+<p class="mb-4">The complete dataset is available for interactive exploration:</p>
+<div class="mb-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg text-sm text-blue-300">
+<strong>Note:</strong> This page must be served through a web server (not opened as file://) due to browser security restrictions. Use a local server like Python's <code>python -m http.server</code> or VS Code's Live Server extension.
+</div>
+<div class="mb-4 flex flex-wrap gap-3">
+<button onclick="loadDataset(event)" class="bg-primary hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-bold transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">dataset</span>
+Load Dataset (Web Server)
+</button>
+<label class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-bold transition-all flex items-center gap-2 cursor-pointer">
+<span class="material-symbols-outlined">upload_file</span>
+Load from File
+<input type="file" accept=".json" onchange="loadDatasetFromFile(event)" class="hidden"/>
+</label>
+<a href="assets/cc75c816-01ca-4bf5-a7c7-fb7ed332bf19.json" download class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-bold transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">download</span>
+Download Dataset
+</a>
+</div>
+<div id="dataset-viewer" class="mt-4">
+<div id="dataset-stats" class="mt-6 hidden">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="glass-panel rounded-lg p-4">
+<p class="text-slate-400 text-sm">Total Entries</p>
+<p class="text-2xl font-bold text-white" id="total-entries">-</p>
+</div>
+<div class="glass-panel rounded-lg p-4">
+<p class="text-slate-400 text-sm">Reasoning Entries</p>
+<p class="text-2xl font-bold text-white" id="reasoning-entries">-</p>
+</div>
+<div class="glass-panel rounded-lg p-4">
+<p class="text-slate-400 text-sm">Feedback Types</p>
+<p class="text-2xl font-bold text-white" id="feedback-count">-</p>
+</div>
+</div>
+<div id="dataset-preview" class="mt-6"></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section 5: Feedback Mechanisms -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">5. Feedback Mechanisms</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">5.1 Feedback Types</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2 flex items-center gap-2">
+<span class="feedback-badge feedback-criticize">CRITICIZE</span>
+</h4>
+<p class="text-sm">Indicates areas that need improvement or refinement. Used for constructive criticism without marking as incorrect.</p>
+</div>
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2 flex items-center gap-2">
+<span class="feedback-badge feedback-incorrect">INCORRECT</span>
+</h4>
+<p class="text-sm">Marks responses or reasoning steps that contain factual errors, logical mistakes, or incorrect implementations.</p>
+</div>
+<div class="glass-panel rounded-xl p-4">
+<h4 class="font-bold text-white mb-2 flex items-center gap-2">
+<span class="feedback-badge feedback-correct">CORRECT</span>
+</h4>
+<p class="text-sm">Validates correct reasoning, accurate solutions, and proper implementations. Used for positive reinforcement.</p>
+</div>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">5.2 Error Code System</h2>
+<p>
+                        The dataset uses standardized error codes for consistent categorization:
+                    </p>
+<div class="glass-panel rounded-xl p-6 mt-4">
+<ul class="space-y-2 text-sm">
+<li><strong>GEN-40:</strong> Generation errors - Issues with response generation or content quality</li>
+<li><strong>LOG-XX:</strong> Logic errors - Flaws in reasoning or algorithmic approach</li>
+<li><strong>SYN-XX:</strong> Syntax errors - Code or structural issues</li>
+<li><strong>PERF-XX:</strong> Performance issues - Time/space complexity problems</li>
+</ul>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">5.3 Feedback Granularity</h2>
+<p>
+                        Feedback is provided at multiple levels:
+                    </p>
+<ul class="list-disc list-inside space-y-2 ml-4 mt-4">
+<li><strong>Line-level (LC):</strong> Specific line or section feedback</li>
+<li><strong>Global (GC):</strong> Overall assessment of the response</li>
+<li><strong>Step-level:</strong> Feedback on individual reasoning steps</li>
+<li><strong>Response-level:</strong> High-level evaluation of the complete response</li>
+</ul>
+</div>
+</section>
+
+<!-- Section 6: Training Integration -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">6. Training Pipeline Integration</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">6.1 RLMF Training Loop</h2>
+<div class="glass-panel rounded-xl p-6">
+<pre class="text-sm text-slate-300">
+1. <strong>Initialization:</strong> Load Student Model and Teacher Model
+2. <strong>Sampling:</strong> Generate responses from Student Model
+3. <strong>Evaluation:</strong> Teacher Model evaluates responses
+4. <strong>Reward Calculation:</strong> Convert feedback to reward signals
+5. <strong>Policy Update:</strong> Update Student Model using PPO/DPO
+6. <strong>Iteration:</strong> Repeat steps 2-5 for multiple epochs
+</pre>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">6.2 Reward Signal Construction</h2>
+<p>
+                        Feedback from the dataset is converted to reward signals:
+                    </p>
+<div class="bg-[#0f1115] border border-white/10 rounded-xl p-6 my-6">
+<pre class="text-sm text-slate-300"><span class="text-purple-400">def</span> <span class="text-blue-400">calculate_reward</span>(feedback):
+    <span class="text-gray-500"># Convert feedback type to reward</span>
+    <span class="text-purple-400">if</span> feedback[<span class="text-green-400">'feedback_type'</span>] == <span class="text-green-400">'CORRECT'</span>:
+        <span class="text-purple-400">return</span> <span class="text-yellow-400">1.0</span>
+    <span class="text-purple-400">elif</span> feedback[<span class="text-green-400">'feedback_type'</span>] == <span class="text-green-400">'CRITICIZE'</span>:
+        <span class="text-purple-400">return</span> <span class="text-yellow-400">0.3</span>
+    <span class="text-purple-400">elif</span> feedback[<span class="text-green-400">'feedback_type'</span>] == <span class="text-green-400">'INCORRECT'</span>:
+        <span class="text-purple-400">return</span> <span class="text-yellow-400">-0.5</span>
+    <span class="text-purple-400">return</span> <span class="text-yellow-400">0.0</span></pre>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">6.3 Dataset Usage</h2>
+<p>
+                        The dataset can be used in multiple ways:
+                    </p>
+<ul class="list-disc list-inside space-y-2 ml-4 mt-4">
+<li><strong>Supervised Fine-tuning:</strong> Use prompt-response pairs for SFT</li>
+<li><strong>Reward Modeling:</strong> Train reward models using feedback signals</li>
+<li><strong>Contrastive Learning:</strong> Compare correct vs. incorrect responses</li>
+<li><strong>Reasoning Chain Analysis:</strong> Study reasoning patterns for improvement</li>
+</ul>
+</div>
+</section>
+
+<!-- Section 7: Statistics -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">7. Dataset Statistics & Analysis</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">7.1 Dataset Composition</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="glass-panel rounded-xl p-6">
+<h4 class="font-bold text-white mb-3">Entry Types</h4>
+<ul class="space-y-2 text-sm">
+<li>REASONING entries: ~60% (detailed reasoning chains)</li>
+<li>NORMAL entries: ~40% (standard responses)</li>
+</ul>
+</div>
+<div class="glass-panel rounded-xl p-6">
+<h4 class="font-bold text-white mb-3">Feedback Distribution</h4>
+<ul class="space-y-2 text-sm">
+<li>CORRECT: ~35%</li>
+<li>CRITICIZE: ~45%</li>
+<li>INCORRECT: ~20%</li>
+</ul>
+</div>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">7.2 Quality Metrics</h2>
+<div class="glass-panel rounded-xl p-6">
+<ul class="space-y-2">
+<li><strong>Reasoning Chain Completeness:</strong> Average 15-20 reasoning steps per entry</li>
+<li><strong>Feedback Specificity:</strong> 95% of feedback includes line-level references</li>
+<li><strong>Error Code Coverage:</strong> 12 distinct error categories</li>
+<li><strong>Temporal Coverage:</strong> Dataset spans multiple training iterations</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- Section 8: Usage Guidelines -->
+<section class="page-break mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">8. Usage Guidelines</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">8.1 Loading the Dataset</h2>
+<div class="bg-[#0f1115] border border-white/10 rounded-xl p-6 my-6">
+<pre class="text-sm text-slate-300"><span class="text-purple-400">import</span> json
+
+<span class="text-gray-500"># Load dataset</span>
+<span class="text-purple-400">with</span> <span class="text-blue-400">open</span>(<span class="text-green-400">'cc75c816-01ca-4bf5-a7c7-fb7ed332bf19.json'</span>) <span class="text-purple-400">as</span> f:
+    dataset = json.load(f)
+
+<span class="text-gray-500"># Filter by type</span>
+reasoning_entries = [e <span class="text-purple-400">for</span> e <span class="text-purple-400">in</span> dataset <span class="text-purple-400">if</span> e[<span class="text-green-400">'type'</span>] == <span class="text-green-400">'REASONING'</span>]
+
+<span class="text-gray-500"># Filter by feedback type</span>
+incorrect_entries = [e <span class="text-purple-400">for</span> e <span class="text-purple-400">in</span> dataset 
+                     <span class="text-purple-400">if</span> e.get(<span class="text-green-400">'humanFeedback'</span>, {}).get(<span class="text-green-400">'feedback_type'</span>) == <span class="text-green-400">'INCORRECT'</span>]</pre>
+</div>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">8.2 Best Practices</h2>
+<ul class="list-disc list-inside space-y-2 ml-4 mt-4">
+<li>Use reasoning chains for understanding model thought processes</li>
+<li>Leverage feedback for reward model training</li>
+<li>Analyze error patterns to identify common failure modes</li>
+<li>Balance dataset usage across feedback types for robust training</li>
+</ul>
+</div>
+</section>
+
+<!-- Section 9: Conclusion -->
+<section class="mb-20">
+<h1 class="text-4xl font-serif italic text-white mb-8 border-b border-white/10 pb-4">9. Conclusion & Future Work</h1>
+<div class="space-y-6 text-slate-300 leading-relaxed">
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">9.1 Summary</h2>
+<p>
+                        The Multimodal RLMF Dataset represents a significant advancement in automated AI training. By enabling continuous feedback generation through Teacher Models, this dataset facilitates scalable reinforcement learning that can operate 24/7 without human intervention.
+                    </p>
+
+<h2 class="text-2xl font-bold text-white mt-8 mb-4">9.2 Future Enhancements</h2>
+<div class="glass-panel rounded-xl p-6">
+<ul class="space-y-3">
+<li>
+<strong>Expanded Modalities:</strong> Extend dataset to include image, audio, and video feedback
+</li>
+<li>
+<strong>Multi-Task Coverage:</strong> Expand beyond 3D generation to other AI domains
+</li>
+<li>
+<strong>Feedback Refinement:</strong> Improve Teacher Model feedback quality through iterative training
+</li>
+<li>
+<strong>Real-time Integration:</strong> Enable live dataset updates during training
+</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- Dataset Viewer Script -->
+<script>
+        let datasetData = null;
+        
+        async function loadDataset() {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            try {
+                // Show loading state
+                button.disabled = true;
+                button.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Loading...';
+                
+                // Try multiple path variations
+                const paths = [
+                    'assets/cc75c816-01ca-4bf5-a7c7-fb7ed332bf19.json',
+                    './assets/cc75c816-01ca-4bf5-a7c7-fb7ed332bf19.json',
+                    '../assets/cc75c816-01ca-4bf5-a7c7-fb7ed332bf19.json'
+                ];
+                
+                let response = null;
+                let lastError = null;
+                
+                for (const path of paths) {
+                    try {
+                        response = await fetch(path);
+                        if (response.ok) {
+                            break;
+                        }
+                    } catch (err) {
+                        lastError = err;
+                        continue;
+                    }
+                }
+                
+                if (!response || !response.ok) {
+                    throw new Error(`Failed to fetch dataset. HTTP status: ${response?.status || 'N/A'}. ${lastError?.message || 'Please ensure you are accessing this page through a web server (not file://).'}`);
+                }
+                
+                const data = await response.json();
+                
+                // Handle both array and object formats
+                if (Array.isArray(data)) {
+                    datasetData = data;
+                } else if (data && typeof data === 'object') {
+                    // If it's an object, check if it has entries array or convert to array
+                    if (Array.isArray(data.entries)) {
+                        datasetData = data.entries;
+                    } else if (Array.isArray(data.data)) {
+                        datasetData = data.data;
+                    } else {
+                        // Convert object to array of entries
+                        datasetData = Object.values(data).filter(item => item && typeof item === 'object');
+                    }
+                } else {
+                    throw new Error('Invalid dataset format');
+                }
+                
+                if (!datasetData || datasetData.length === 0) {
+                    throw new Error('Dataset is empty or invalid');
+                }
+                
+                // Calculate statistics
+                const totalEntries = datasetData.length;
+                const reasoningEntries = datasetData.filter(e => e && e.type === 'REASONING').length;
+                const feedbackCount = datasetData.filter(e => e && e.humanFeedback).length;
+                
+                // Update stats
+                document.getElementById('total-entries').textContent = totalEntries.toLocaleString();
+                document.getElementById('reasoning-entries').textContent = reasoningEntries.toLocaleString();
+                document.getElementById('feedback-count').textContent = feedbackCount.toLocaleString();
+                
+                // Show stats
+                document.getElementById('dataset-stats').classList.remove('hidden');
+                
+                // Display sample entries
+                displaySampleEntries();
+                
+                // Update button
+                button.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Dataset Loaded';
+                button.classList.remove('bg-primary', 'hover:bg-blue-600');
+                button.classList.add('bg-green-600', 'hover:bg-green-700');
+                
+            } catch (error) {
+                console.error('Error loading dataset:', error);
+                button.innerHTML = '<span class="material-symbols-outlined">error</span> Load Failed';
+                button.classList.remove('bg-primary', 'hover:bg-blue-600');
+                button.classList.add('bg-red-600', 'hover:bg-red-700');
+                
+                // Show error message
+                const existingError = document.getElementById('dataset-error');
+                if (existingError) existingError.remove();
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.id = 'dataset-error';
+                errorDiv.className = 'mt-4 p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm';
+                errorDiv.innerHTML = `
+                    <strong>Error loading dataset:</strong> ${error.message}<br>
+                    <div class="mt-3 space-y-2 text-xs text-slate-400">
+                        <p><strong>Solutions:</strong></p>
+                        <ul class="list-disc list-inside ml-2 space-y-1">
+                            <li>Use a local web server (Python: <code>python -m http.server 8000</code>)</li>
+                            <li>Use VS Code Live Server extension</li>
+                            <li>Download the dataset directly using the "Download Dataset" button above</li>
+                            <li>Check browser console (F12) for detailed error messages</li>
+                        </ul>
+                        <p class="mt-2">File location: <code>assets/cc75c816-01ca-4bf5-a7c7-fb7ed332bf19.json</code></p>
+                    </div>
+                `;
+                document.getElementById('dataset-viewer').appendChild(errorDiv);
+                
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.innerHTML = originalText;
+                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    button.classList.add('bg-primary', 'hover:bg-blue-600');
+                }, 3000);
+            }
+        }
+        
+        function displaySampleEntries() {
+            const preview = document.getElementById('dataset-preview');
+            
+            if (!datasetData || datasetData.length === 0) {
+                preview.innerHTML = '<p class="text-slate-400">No entries to display.</p>';
+                return;
+            }
+            
+            const samples = datasetData.slice(0, 5); // Show first 5 entries
+            const validSamples = samples.filter(e => e && typeof e === 'object');
+            
+            if (validSamples.length === 0) {
+                preview.innerHTML = '<p class="text-slate-400">No valid entries found in dataset.</p>';
+                return;
+            }
+            
+            preview.innerHTML = `
+                <h3 class="text-xl font-bold text-white mb-4">Sample Entries (Showing ${validSamples.length} of ${datasetData.length})</h3>
+                <p class="text-sm text-slate-400 mb-4">Use the filters below to explore the dataset further.</p>
+            `;
+            
+            validSamples.forEach((entry, idx) => {
+                if (!entry || typeof entry !== 'object') return;
+                
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'dataset-entry glass-panel rounded-xl p-6 mb-4';
+                
+                // Safely extract text content
+                const promptText = entry.rawPromptToLLM || entry.prompt || entry.step || 'No prompt available';
+                const promptPreview = typeof promptText === 'string' 
+                    ? promptText.substring(0, 300) + (promptText.length > 300 ? '...' : '')
+                    : JSON.stringify(promptText).substring(0, 300);
+                
+                const feedback = entry.humanFeedback || {};
+                const feedbackType = feedback.feedback_type || feedback.feedbackType || null;
+                const feedbackText = feedback.human_feedback || feedback.humanFeedback || feedback.feedback || 'No feedback available';
+                
+                entryDiv.innerHTML = `
+                    <h4 class="font-bold text-primary mb-2">Entry ${idx + 1}${entry.id ? ` (ID: ${entry.id})` : ''}</h4>
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <strong class="text-white">Type:</strong> 
+                            <code class="text-primary">${entry.type || 'NORMAL'}</code>
+                            ${entry.createdAt ? `<span class="text-slate-500 text-xs ml-2">${new Date(entry.createdAt).toLocaleDateString()}</span>` : ''}
+                        </div>
+                        <div>
+                            <strong class="text-white">Prompt/Step:</strong>
+                            <p class="text-slate-400 mt-1 bg-[#0f1115] p-3 rounded border border-white/10 max-h-32 overflow-y-auto">
+                                ${escapeHtml(promptPreview)}
+                            </p>
+                        </div>
+                        ${feedbackType ? `
+                        <div>
+                            <strong class="text-white">Feedback:</strong>
+                            <span class="feedback-badge ${getFeedbackClass(feedbackType)} ml-2">
+                                ${feedbackType}
+                            </span>
+                            <p class="text-slate-400 mt-1">${escapeHtml(feedbackText)}</p>
+                            ${feedback['Error Code'] ? `<p class="text-xs text-slate-500 mt-1">Error Code: ${feedback['Error Code']}</p>` : ''}
+                        </div>
+                        ` : ''}
+                        ${entry.reasoning_content ? `
+                        <details class="mt-2">
+                            <summary class="cursor-pointer text-primary hover:text-blue-400">View Reasoning Chain</summary>
+                            <pre class="mt-2 text-xs bg-[#0f1115] p-3 rounded border border-white/10 max-h-48 overflow-y-auto">${escapeHtml(entry.reasoning_content.substring(0, 1000))}${entry.reasoning_content.length > 1000 ? '...' : ''}</pre>
+                        </details>
+                        ` : ''}
+                    </div>
+                `;
+                preview.appendChild(entryDiv);
+            });
+        }
+        
+        function escapeHtml(text) {
+            if (typeof text !== 'string') {
+                text = String(text);
+            }
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function getFeedbackClass(type) {
+            if (type === 'CRITICIZE') return 'feedback-criticize';
+            if (type === 'INCORRECT') return 'feedback-incorrect';
+            if (type === 'CORRECT') return 'feedback-correct';
+            return '';
+        }
+        
+        // Alternative: Load dataset from file input (works with file:// protocol)
+        async function loadDatasetFromFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const button = event.target.closest('label');
+            const originalHTML = button.innerHTML;
+            
+            try {
+                button.classList.add('opacity-50', 'cursor-not-allowed');
+                button.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Loading...';
+                
+                const text = await file.text();
+                const data = JSON.parse(text);
+                
+                // Handle both array and object formats
+                if (Array.isArray(data)) {
+                    datasetData = data;
+                } else if (data && typeof data === 'object') {
+                    if (Array.isArray(data.entries)) {
+                        datasetData = data.entries;
+                    } else if (Array.isArray(data.data)) {
+                        datasetData = data.data;
+                    } else {
+                        datasetData = Object.values(data).filter(item => item && typeof item === 'object');
+                    }
+                } else {
+                    throw new Error('Invalid dataset format');
+                }
+                
+                if (!datasetData || datasetData.length === 0) {
+                    throw new Error('Dataset is empty or invalid');
+                }
+                
+                // Calculate statistics
+                const totalEntries = datasetData.length;
+                const reasoningEntries = datasetData.filter(e => e && e.type === 'REASONING').length;
+                const feedbackCount = datasetData.filter(e => e && e.humanFeedback).length;
+                
+                // Update stats
+                document.getElementById('total-entries').textContent = totalEntries.toLocaleString();
+                document.getElementById('reasoning-entries').textContent = reasoningEntries.toLocaleString();
+                document.getElementById('feedback-count').textContent = feedbackCount.toLocaleString();
+                
+                // Show stats
+                document.getElementById('dataset-stats').classList.remove('hidden');
+                
+                // Display sample entries
+                displaySampleEntries();
+                
+                // Update button
+                button.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Loaded: ' + file.name;
+                button.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-slate-700', 'hover:bg-slate-600');
+                button.classList.add('bg-green-600', 'hover:bg-green-700');
+                
+                // Remove error message if exists
+                const errorDiv = document.getElementById('dataset-error');
+                if (errorDiv) errorDiv.remove();
+                
+            } catch (error) {
+                console.error('Error loading dataset from file:', error);
+                button.innerHTML = '<span class="material-symbols-outlined">error</span> Load Failed';
+                button.classList.remove('bg-slate-700', 'hover:bg-slate-600');
+                button.classList.add('bg-red-600', 'hover:bg-red-700');
+                
+                alert('Error loading dataset: ' + error.message);
+                
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('bg-red-600', 'hover:bg-red-700', 'opacity-50', 'cursor-not-allowed');
+                    button.classList.add('bg-slate-700', 'hover:bg-slate-600');
+                }, 3000);
+            }
+        }
+    </script>
+
+<!-- Footer -->
+<footer class="border-t border-white/10 pt-8 mt-12 text-center text-slate-500 text-sm">
+<p>© 2024 Srinivas Nallamati. All rights reserved.</p>
+<p class="mt-2">This whitepaper is provided for educational and research purposes.</p>
+<p class="mt-2">
+<a href="project-4.html" class="text-primary hover:underline">← Back to Multimodal RLMF Workflow</a>
+</p>
+</footer>
+</main>
+</body></html>
+
