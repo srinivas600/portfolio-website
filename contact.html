@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="config.js"></script>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -133,29 +134,29 @@
                     </p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-<a href="mailto:srinivasnallamati987@gmail.com" class="contact-card glass-panel rounded-2xl p-8 text-center group">
+<a href="#" id="contact-email-link" class="contact-card glass-panel rounded-2xl p-8 text-center group">
 <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
 <span class="material-symbols-outlined text-3xl text-primary">mail</span>
 </div>
 <h3 class="text-xl font-bold text-white mb-2">Email</h3>
 <p class="text-slate-400 text-sm mb-4">Drop me a line</p>
-<p class="text-primary text-sm font-medium group-hover:underline">srinivasnallamati987@gmail.com</p>
+<p class="text-primary text-sm font-medium group-hover:underline" id="contact-email-text">srinivasnallamati987@gmail.com</p>
 </a>
-<a href="https://linkedin.com/in/srinivas-nallamati" target="_blank" class="contact-card glass-panel rounded-2xl p-8 text-center group">
+<a href="#" id="contact-linkedin-link" target="_blank" class="contact-card glass-panel rounded-2xl p-8 text-center group">
 <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
 <span class="material-symbols-outlined text-3xl text-blue-400">work</span>
 </div>
 <h3 class="text-xl font-bold text-white mb-2">LinkedIn</h3>
 <p class="text-slate-400 text-sm mb-4">Professional network</p>
-<p class="text-blue-400 text-sm font-medium group-hover:underline">linkedin.com/in/srinivas-nallamati</p>
+<p class="text-blue-400 text-sm font-medium group-hover:underline" id="contact-linkedin-text">linkedin.com/in/srinivas-nallamati</p>
 </a>
-<a href="https://github.com/srinivas600" target="_blank" class="contact-card glass-panel rounded-2xl p-8 text-center group">
+<a href="#" id="contact-github-link" target="_blank" class="contact-card glass-panel rounded-2xl p-8 text-center group">
 <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-slate-500/10 border border-slate-500/30 flex items-center justify-center group-hover:bg-slate-500/20 transition-colors">
 <span class="material-symbols-outlined text-3xl text-slate-400">code</span>
 </div>
 <h3 class="text-xl font-bold text-white mb-2">GitHub</h3>
 <p class="text-slate-400 text-sm mb-4">Check out my code</p>
-<p class="text-slate-400 text-sm font-medium group-hover:underline">github.com/srinivas600</p>
+<p class="text-slate-400 text-sm font-medium group-hover:underline" id="contact-github-text">github.com/srinivas600</p>
 </a>
 </div>
 <div class="glass-panel rounded-2xl p-8 lg:p-12 reveal-on-scroll" style="animation-delay: 0.1s;">
@@ -167,11 +168,11 @@
                         Whether you're looking to collaborate on an AI project, discuss opportunities, or just want to connect, I'd love to hear from you. Feel free to reach out through any of the channels above.
                     </p>
 <div class="flex flex-wrap gap-4">
-<a href="mailto:srinivasnallamati987@gmail.com" class="group bg-primary hover:bg-blue-600 text-white text-sm font-sans uppercase tracking-widest font-bold h-12 px-8 rounded-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+<a href="#" id="contact-send-email-link" class="group bg-primary hover:bg-blue-600 text-white text-sm font-sans uppercase tracking-widest font-bold h-12 px-8 rounded-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]">
 <span>Send Email</span>
 <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
 </a>
-<a href="https://wa.me/7013725286" target="_blank" class="group bg-green-500 hover:bg-green-600 text-white text-sm font-sans uppercase tracking-widest font-bold h-12 px-8 rounded-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-[0_0_30px_rgba(34,197,94,0.6)]">
+<a href="#" id="contact-whatsapp-link" target="_blank" class="group bg-green-500 hover:bg-green-600 text-white text-sm font-sans uppercase tracking-widest font-bold h-12 px-8 rounded-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-[0_0_30px_rgba(34,197,94,0.6)]">
 <span>WhatsApp</span>
 <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">chat</span>
 </a>
@@ -197,5 +198,40 @@
 </div>
 </div>
 </footer>
+<script>
+        // Initialize contact links from config
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.PortfolioConfig) {
+                const config = window.PortfolioConfig;
+                
+                // Email links
+                const emailLink = document.getElementById('contact-email-link');
+                const sendEmailLink = document.getElementById('contact-send-email-link');
+                const emailText = document.getElementById('contact-email-text');
+                
+                if (emailLink) emailLink.href = config.getEmailLink();
+                if (sendEmailLink) sendEmailLink.href = config.getEmailLink();
+                if (emailText) emailText.textContent = config.contactEmail;
+                
+                // LinkedIn link
+                const linkedinLink = document.getElementById('contact-linkedin-link');
+                const linkedinText = document.getElementById('contact-linkedin-text');
+                
+                if (linkedinLink) linkedinLink.href = config.getLinkedInLink();
+                if (linkedinText) linkedinText.textContent = `linkedin.com/in/${config.linkedinUsername}`;
+                
+                // GitHub link
+                const githubLink = document.getElementById('contact-github-link');
+                const githubText = document.getElementById('contact-github-text');
+                
+                if (githubLink) githubLink.href = config.getGithubLink();
+                if (githubText) githubText.textContent = `github.com/${config.githubUsername}`;
+                
+                // WhatsApp link
+                const whatsappLink = document.getElementById('contact-whatsapp-link');
+                if (whatsappLink) whatsappLink.href = config.getWhatsAppLink();
+            }
+        });
+    </script>
 </body></html>
 
